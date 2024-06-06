@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 
-  ul, ol, li{
+  ul{
     list-style: none;
   }
 
