@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
-import { Header, Footer } from 'components/layout';
 import { Outro, Result } from 'components';
+import { Header, Footer } from 'components/layout';
 
+import useOctokit from 'utils/useOctokit';
 import { COLOR } from 'utils/constants';
 
 function MainPage() {
@@ -94,6 +95,14 @@ function MainPage() {
     }
   `;
 
+  const user = useOctokit('nurimeansworld', 'users', 'params');
+
+  if (!user) {
+    console.error('empty user data');
+  } else {
+    console.log(user);
+  }
+
   return (
     <>
       <Header />
@@ -148,4 +157,5 @@ function MainPage() {
     </>
   );
 }
+
 export default MainPage;
