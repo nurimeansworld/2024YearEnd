@@ -1,31 +1,6 @@
 import styled from 'styled-components';
 
 function Result() {
-  const Section = styled.section`
-    div {
-      position: relative;
-      left: 3rem;
-    }
-    div::before {
-      position: absolute;
-      left: -3rem;
-      content: '> ';
-      width: 1rem;
-      height: 1rem;
-    }
-    ol {
-      margin-left: 4rem;
-    }
-    div ~ div {
-      margin-top: 5rem;
-    }
-
-    .userName {
-      text-align: center;
-      margin-bottom: 4rem;
-    }
-  `;
-
   return (
     <Section>
       <h2 className='sr-only'>연말결산 결과</h2>
@@ -101,5 +76,30 @@ function Result() {
     </Section>
   );
 }
+
+const Section = styled.section`
+  div {
+    position: relative;
+    left: 3rem;
+  }
+  div::before {
+    position: absolute;
+    left: -3rem;
+    content: '> ';
+    width: 1rem;
+    height: 1rem;
+  }
+  ol {
+    margin-left: 4rem;
+  }
+  div ~ div {
+    margin-top: 5rem;
+  }
+
+  .userName {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+`;
 
 export default Result;

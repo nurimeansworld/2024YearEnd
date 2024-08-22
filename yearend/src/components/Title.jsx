@@ -1,15 +1,5 @@
 import styled from 'styled-components';
 
-const Title = styled.section`
-  font-size: 3.6rem;
-  text-align: center;
-  letter-spacing: 0.7rem;
-
-  h2 {
-    margin: 3rem 0;
-  }
-`;
-
 function Intro() {
   return (
     {/* title */}
@@ -27,5 +17,15 @@ function Intro() {
     </Title>
   );
 }
+
+const Title = styled.section`
+  font-size: 3.6rem;
+  text-align: center;
+  letter-spacing: 0.7rem;
+
+  h2 {
+    margin: 3rem 0;
+  }
+`;
 
 export default Title;
