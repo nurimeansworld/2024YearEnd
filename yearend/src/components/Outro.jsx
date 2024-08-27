@@ -3,25 +3,6 @@ import styled from 'styled-components';
 import { Share } from './';
 
 function Outro() {
-  const Sec = styled.section`
-    p,
-    div {
-      position: relative;
-      left: 3rem;
-    }
-    p::before,
-    div::before {
-      position: absolute;
-      left: -3rem;
-      content: '> ';
-      width: 1rem;
-      height: 1rem;
-    }
-
-    .sec-emoji {
-      margin: 5rem 0;
-    }
-  `;
   return (
     <Sec>
       <h2 className='sr-only'>연말결산 공유하기</h2>
@@ -39,4 +20,23 @@ function Outro() {
     </Sec>
   );
 }
+const Sec = styled.section`
+  p,
+  div {
+    position: relative;
+    left: 3rem;
+  }
+  p::before,
+  div::before {
+    position: absolute;
+    left: -3rem;
+    content: '> ';
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .sec-emoji {
+    margin: 5rem 0;
+  }
+`;
 export default Outro;

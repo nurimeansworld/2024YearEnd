@@ -7,94 +7,6 @@ import useOctokit from 'utils/useOctokit';
 import { COLOR } from 'utils/constants';
 
 function MainPage() {
-  const Wrapper = styled.section`
-    /* width: 76.8rem; */
-    width: 65rem;
-    margin: 0 auto;
-
-    font-size: 2rem;
-    letter-spacing: 0.4rem;
-    line-height: 3rem;
-
-    section ~ section {
-      margin-top: 5rem;
-    }
-
-    input {
-      color: inherit;
-      font-family: inherit;
-      font-size: inherit;
-      letter-spacing: inherit;
-      line-height: inherit;
-      background-color: ${COLOR.bg};
-      border-width: 0 0 1px;
-      border-style: dashed;
-      border-color: ${COLOR.text};
-    }
-    input:focus {
-      color: inherit;
-    }
-  `;
-
-  const Title = styled.section`
-    text-align: center;
-    line-height: 5rem;
-    letter-spacing: 1.5rem;
-  `;
-
-  const Intro = styled.section`
-    p {
-      position: relative;
-      left: 3rem;
-    }
-    p::before {
-      position: absolute;
-      left: -3rem;
-      content: '> ';
-      width: 1rem;
-      height: 1rem;
-    }
-    /* p {
-      overflow: hidden;
-      border-right: 1rem solid white;
-      white-space: nowrap;
-      margin: 0 auto;
-      letter-spacing: 0.15em;
-      animation: typing 5s steps(50), blink-caret 0.5s step-end infinite;
-    }
-    @keyframes typing {
-      from {
-        width: 0;
-      }
-      to {
-        width: 100%;
-      }
-    }
-    @keyframes blink-caret {
-      from,
-      to {
-        border-color: transparent;
-      }
-      50% {
-        border-color: white;
-      }
-    } */
-  `;
-
-  const Form = styled.section`
-    p {
-      position: relative;
-      left: 3rem;
-    }
-    p::before {
-      position: absolute;
-      left: -3rem;
-      content: '> ';
-      width: 1rem;
-      height: 1rem;
-    }
-  `;
-
   const user = useOctokit('nurimeansworld', 'users', 'params');
 
   if (!user) {
@@ -157,5 +69,93 @@ function MainPage() {
     </>
   );
 }
+
+const Wrapper = styled.section`
+  /* width: 76.8rem; */
+  width: 65rem;
+  margin: 0 auto;
+
+  font-size: 2rem;
+  letter-spacing: 0.4rem;
+  line-height: 3rem;
+
+  section ~ section {
+    margin-top: 5rem;
+  }
+
+  input {
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    background-color: ${COLOR.bg};
+    border-width: 0 0 1px;
+    border-style: dashed;
+    border-color: ${COLOR.text};
+  }
+  input:focus {
+    color: inherit;
+  }
+`;
+
+const Title = styled.section`
+  text-align: center;
+  line-height: 5rem;
+  letter-spacing: 1.5rem;
+`;
+
+const Intro = styled.section`
+  p {
+    position: relative;
+    left: 3rem;
+  }
+  p::before {
+    position: absolute;
+    left: -3rem;
+    content: '> ';
+    width: 1rem;
+    height: 1rem;
+  }
+  /* p {
+      overflow: hidden;
+      border-right: 1rem solid white;
+      white-space: nowrap;
+      margin: 0 auto;
+      letter-spacing: 0.15em;
+      animation: typing 5s steps(50), blink-caret 0.5s step-end infinite;
+    }
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
+    }
+    @keyframes blink-caret {
+      from,
+      to {
+        border-color: transparent;
+      }
+      50% {
+        border-color: white;
+      }
+    } */
+`;
+
+const Form = styled.section`
+  p {
+    position: relative;
+    left: 3rem;
+  }
+  p::before {
+    position: absolute;
+    left: -3rem;
+    content: '> ';
+    width: 1rem;
+    height: 1rem;
+  }
+`;
 
 export default MainPage;
