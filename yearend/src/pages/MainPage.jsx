@@ -7,7 +7,8 @@ import useOctokit from 'utils/useOctokit';
 import { COLOR } from 'utils/constants';
 
 function MainPage() {
-  const user = useOctokit('nurimeansworld', 'users', 'params');
+  const user = useOctokit('nurimeansworld', '/users/{account_id}');
+  // const user = useOctokit('nurimeansworld', '/users/{account_id}/repos?type=all');
 
   if (!user) {
     console.error('empty user data');
