@@ -50,6 +50,10 @@ const GlobalStyle = createGlobalStyle`
     user-select: none;
   }
 
+  span {
+    color: red;
+  }
+
   .sr-only {
     overflow: hidden;
     position: absolute;

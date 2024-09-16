@@ -9,7 +9,7 @@ function Outro() {
       <p>기록으로 돌아본 2024년 올해, 어떠셨나요?</p>
       <p>새해 복 많이 받으시고 다가올 2025년도 아자아자 힘내봐요.!💖 </p>
 
-      <div class='sec-emoji'>
+      <div className='sec-emoji'>
         &nbsp;&nbsp;&nbsp;&nbsp;( ^ _ ^) <br />
         &nbsp;_(_つ/ ￣ ￣/_ <br />
         &nbsp;&nbsp;&nbsp;\/ _ _ /
