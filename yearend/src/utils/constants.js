@@ -5,3 +5,5 @@ export const COLOR = {
   point2: '#EC6FF7',
   point3: '#9CFC78',
 };
+
+export const YEAR = '2024';

@@ -4,7 +4,7 @@ import { Outro, Result } from 'components';
 import { Header, Footer } from 'components/layout';
 
 import useOctokit from 'utils/useOctokit';
-import { COLOR } from 'utils/constants';
+import { COLOR, YEAR } from 'utils/constants';
 
 function MainPage() {
   const user = useOctokit('nurimeansworld', '/users/{account_id}');
@@ -26,7 +26,7 @@ function MainPage() {
           <Title>
             <p>******************</p>
             <h2>
-              2023
+              {YEAR}
               <br />
               GitHub 연말결산
             </h2>
@@ -37,7 +37,7 @@ function MainPage() {
           <Intro>
             <h2 className='sr-only'>연말결산 소개</h2>
             <div>
-              <p>GitHub로 돌아보는 나의 2023년 개발 기록</p>
+              <p>GitHub로 돌아보는 나의 {YEAR}년 개발 기록</p>
               <p>
                 계속하려면 아무 키나 누르십시오. . .
                 <br />

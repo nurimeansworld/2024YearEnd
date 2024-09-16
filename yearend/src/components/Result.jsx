@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { YEAR } from 'utils/constants';
 
 function Result() {
   return (
@@ -32,7 +33,7 @@ function Result() {
       </div>
 
       <div>
-        2023년 올해에는
+        {YEAR}년 올해에는
         <ul>
           <li>
             - <span>000</span>개의 커밋

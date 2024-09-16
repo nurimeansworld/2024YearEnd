@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { YEAR } from 'utils/constants';
+
 function Intro() {
   return (
     {/* title */}
@@ -8,7 +10,7 @@ function Intro() {
       <CenterSec>
         <p>******************</p>
         <h2>
-          2023
+          {YEAR}
           <br />
           GitHub 연말결산
         </h2>
