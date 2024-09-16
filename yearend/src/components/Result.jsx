@@ -1,33 +1,55 @@
 import styled from 'styled-components';
 import { YEAR } from 'utils/constants';
 
-function Result() {
+function Result({
+  user,
+  userRepo,
+  userRepoCommits,
+  userIssues,
+  userPRs,
+  staredRepo,
+}) {
+  // CHECK:: 예외처리 모두 ..
+  const created = user ? user.created_at : '9999-99-99';
+  const startDate = created.slice(0, 10);
+  const countDate = Math.round(
+    (new Date() - new Date(created)) / (1000 * 60 * 60 * 24) + 1
+  );
+  const userName = user ? user.login : 'test';
+
+  // const countRepo = user ? user.public_repos + user.total_private_repos : '000';
+
+  const countCommits = userRepoCommits ? userRepoCommits.counts : '000';
+  const countIssues = userIssues ? userIssues.counts : '000';
+  const countPR = userPRs ? userPRs.counts : '000';
+  const countRepo = user ? user.public_repos : '000';
+
   return (
     <Section>
       <h2 className='sr-only'>연말결산 결과</h2>
-      <p class='userName'>
-        username : '<span id='userName'>___</span>'
+      <p className='userName'>
+        username : '<span id='userName'>{userName}</span>'
       </p>
       <div>
         GitHub와 함께 개발 여정을 시작한 <br />
-        <span id='startDate'>'YYYY-mm-dd'</span> 로부터{' '}
-        <span id='countDate'>'000'</span>일이 지났어요.
+        <span id='startDate'>'{startDate}'</span> 로부터{' '}
+        <span id='countDate'>'{countDate}'</span>일이 지났어요.
       </div>
 
       <div>
-        그동안 '<span id='userName'>___</span>'님은
+        그동안 '<span id='userName'>{userName}</span>'님은
         <ul>
           <li>
-            - <span>000</span>개의 커밋
+            - <span>{countCommits}</span>개의 커밋
           </li>
           <li>
-            - <span>000</span>개의 이슈
+            - <span>{countIssues}</span>개의 이슈
           </li>
           <li>
-            - <span>000</span>개의 PR
+            - <span>{countPR}</span>개의 PR
           </li>
           <li>
-            - <span>000</span>개의 저장소를 생성하였어요.
+            - <span>{countRepo}</span>개의 저장소를 생성하였어요.
           </li>
         </ul>
       </div>

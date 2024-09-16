@@ -7,14 +7,56 @@ import useOctokit from 'utils/useOctokit';
 import { COLOR, YEAR } from 'utils/constants';
 
 function MainPage() {
-  const user = useOctokit('nurimeansworld', '/users/{account_id}');
-  // const user = useOctokit('nurimeansworld', '/users/{account_id}/repos?type=all');
+  const testRepoName = 'strawberry_market';
 
-  if (!user) {
-    console.error('empty user data');
-  } else {
-    console.log(user);
-  }
+  const user = useOctokit(
+    'nurimeansworld',
+    testRepoName,
+    '/users/{account_id}'
+  );
+  const userRepo = useOctokit(
+    'nurimeansworld',
+    testRepoName,
+    '/users/{account_id}/repos'
+  );
+
+  const userRepoCommits = useOctokit(
+    'nurimeansworld',
+    testRepoName,
+    '/repos/{account_id}/{repo}/commits?per_page=1&page=1&committer={account_id}'
+  );
+
+  // const userActivity = useOctokit(
+  //   'nurimeansworld',
+  //   '/repos/{account_id}/standup_log/stats/commit_activity'
+  // );
+
+  const userIssues = useOctokit(
+    'nurimeansworld',
+    testRepoName,
+    '/issues?fliter=created&state=all&per_page=1&page=1'
+  );
+  const userPRs = useOctokit(
+    'nurimeansworld',
+    testRepoName,
+    '/repos/{account_id}/{repo}/pulls?state=all&per_page=1&page=1'
+    // CHECK:: 여기서 created_at 해서 올해로 정리 필요
+  );
+  const staredRepo = useOctokit(
+    'nurimeansworld',
+    testRepoName,
+    '/repos/{account_id}/{repo}/stargazers?&per_page=1&page=1'
+    // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
+  );
+
+  const data = {
+    user: user,
+    userRepo: userRepo,
+    userRepoCommits: userRepoCommits,
+    userIssues: userIssues,
+    userPRs: userPRs,
+    staredRepo: staredRepo,
+  };
 
   return (
     <>
@@ -59,10 +101,10 @@ function MainPage() {
           </Form>
 
           {/* 2 - result */}
-          <Result />
+          <Result {...data} />
 
           {/* 2 - Outro */}
-          <Outro />
+          <Outro user={user} />
         </Wrapper>
       </main>
 
