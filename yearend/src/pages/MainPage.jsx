@@ -5,58 +5,81 @@ import { Header, Footer } from 'components/layout';
 
 import useOctokit from 'utils/useOctokit';
 import { COLOR, YEAR } from 'utils/constants';
+import { useState, useEffect } from 'react';
 
 function MainPage() {
-  const testRepoName = 'strawberry_market';
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
-  const user = useOctokit(
-    'nurimeansworld',
-    testRepoName,
-    '/users/{account_id}'
-  );
+  const resRepo = {
+    stars: 0,
+    repoList: [],
+  };
+  const testRepoName = 'strawberry_market';
+  const testUserName = 'nurimeansworld';
+
+  const user = useOctokit(testUserName, testRepoName, '/users/{account_id}');
   const userRepo = useOctokit(
-    'nurimeansworld',
+    testUserName,
     testRepoName,
     '/users/{account_id}/repos'
   );
 
   const userRepoCommits = useOctokit(
-    'nurimeansworld',
+    testUserName,
     testRepoName,
     '/repos/{account_id}/{repo}/commits?per_page=1&page=1&committer={account_id}'
   );
 
   // const userActivity = useOctokit(
-  //   'nurimeansworld',
+  //   testUserName,
   //   '/repos/{account_id}/standup_log/stats/commit_activity'
   // );
 
   const userIssues = useOctokit(
-    'nurimeansworld',
+    testUserName,
     testRepoName,
     '/issues?fliter=created&state=all&per_page=1&page=1'
   );
   const userPRs = useOctokit(
-    'nurimeansworld',
+    testUserName,
     testRepoName,
     '/repos/{account_id}/{repo}/pulls?state=all&per_page=1&page=1'
     // CHECK:: 여기서 created_at 해서 올해로 정리 필요
   );
   const staredRepo = useOctokit(
-    'nurimeansworld',
+    testUserName,
     testRepoName,
     '/repos/{account_id}/{repo}/stargazers?&per_page=1&page=1'
     // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
   );
 
-  const data = {
-    user: user,
-    userRepo: userRepo,
-    userRepoCommits: userRepoCommits,
-    userIssues: userIssues,
-    userPRs: userPRs,
-    staredRepo: staredRepo,
-  };
+  useEffect(() => {
+    Promise.all([
+      user,
+      userRepo,
+      userRepoCommits,
+      userIssues,
+      userPRs,
+      staredRepo,
+    ]).then(() => {
+      setData({
+        user: user,
+        userRepo: userRepo,
+        userRepoCommits: userRepoCommits,
+        userIssues: userIssues,
+        userPRs: userPRs,
+        staredRepo: staredRepo,
+      });
+      // userRepo.map((ele) => {
+      //   resRepo.stars += ele.stargazers_count;
+      //   resRepo.repoList.push(ele.name);
+      // });
+      setLoading(true);
+    });
+  }, [user]);
+
+  console.log(data);
 
   return (
     <>
@@ -74,7 +97,6 @@ function MainPage() {
             </h2>
             <p>******************</p>
           </Title>
-
           {/* 1 - intro */}
           <Intro>
             <h2 className='sr-only'>연말결산 소개</h2>
@@ -87,7 +109,6 @@ function MainPage() {
               </p>
             </div>
           </Intro>
-
           {/* 1 - input text */}
           <Form>
             <p>
@@ -99,10 +120,8 @@ function MainPage() {
               입니다.
             </p>
           </Form>
-
           {/* 2 - result */}
           <Result {...data} />
-
           {/* 2 - Outro */}
           <Outro user={user} />
         </Wrapper>
