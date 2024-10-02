@@ -13,6 +13,8 @@ function MainPage() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
+  const [repoList, setRepoList] = useState([]);
+
   const resRepo = {
     stars: 0,
     repoList: [],
@@ -56,6 +58,25 @@ function MainPage() {
   //   // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
   // );
 
+  const getUserRepo = async () => {
+    try {
+      const res = await octokit.request('GET {url}', {
+        account_id: testUserName,
+        url: '/users/{account_id}/repos',
+        headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      });
+      const userRepo = res.data;
+
+      setRepoList(userRepo.map((ele) => ele.name));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getUserRepo();
+  }, []);
+
   useEffect(() => {
     setLoading(false);
     Promise.all([
@@ -63,13 +84,6 @@ function MainPage() {
       octokit.request('GET {url}', {
         account_id: testUserName,
         url: '/users/{account_id}',
-        headers: { 'X-GitHub-Api-Version': '2022-11-28' },
-      }),
-
-      // userRepo
-      octokit.request('GET {url}', {
-        account_id: testUserName,
-        url: '/users/{account_id}/repos',
         headers: { 'X-GitHub-Api-Version': '2022-11-28' },
       }),
       // getUserRepoList(testUserName),
@@ -105,26 +119,22 @@ function MainPage() {
       //   headers: { 'X-GitHub-Api-Version': '2022-11-28' },
       // }),
     ])
-      .then(
-        ([user, userRepo, userRepoCommits, userIssues, userPRs, staredRepo]) =>
-          Promise.all([
-            user.data,
-            userRepo.data,
-            // userRepoCommits.data,
-            // userIssues.data,
-            // userPRs.data,
-            // staredRepo.data,
-          ])
+      .then(([user, userRepoCommits, userIssues, userPRs, staredRepo]) =>
+        Promise.all([
+          user.data,
+          // userRepoCommits.data,
+          // userIssues.data,
+          // userPRs.data,
+          // staredRepo.data,
+        ])
       )
       .then(
         ([
           user,
-          userRepo, // userRepoCommits, // userIssues, // userPRs, // staredRepo,
+          // userRepoCommits, // userIssues, // userPRs, // staredRepo,
         ]) => {
-          const userRepolist = userRepo.map((ele) => ele.name);
           setData({
             user: user,
-            userRepo: userRepolist,
             // userRepoCommits: userRepoCommits,
             // userIssues: userIssues,
             // userPRs: userPRs,
