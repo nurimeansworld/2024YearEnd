@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import { Outro, Result } from 'components';
 import { Header, Footer } from 'components/layout';
 
-import useOctokit from 'utils/useOctokit';
+// import useOctokit from 'utils/useOctokit';
+import { octokit } from 'utils/octokit';
+
 import { COLOR, YEAR } from 'utils/constants';
 import { useState, useEffect } from 'react';
 
@@ -18,68 +20,120 @@ function MainPage() {
   const testRepoName = 'strawberry_market';
   const testUserName = 'nurimeansworld';
 
-  const user = useOctokit(testUserName, testRepoName, '/users/{account_id}');
-  const userRepo = useOctokit(
-    testUserName,
-    testRepoName,
-    '/users/{account_id}/repos'
-  );
-
-  const userRepoCommits = useOctokit(
-    testUserName,
-    testRepoName,
-    '/repos/{account_id}/{repo}/commits?per_page=1&page=1&committer={account_id}'
-  );
-
-  // const userActivity = useOctokit(
+  // const user = useOctokit(testUserName, testRepoName, '/users/{account_id}');
+  // const userRepo = useOctokit(
   //   testUserName,
-  //   '/repos/{account_id}/standup_log/stats/commit_activity'
+  //   testRepoName,
+  //   '/users/{account_id}/repos'
   // );
 
-  const userIssues = useOctokit(
-    testUserName,
-    testRepoName,
-    '/issues?fliter=created&state=all&per_page=1&page=1'
-  );
-  const userPRs = useOctokit(
-    testUserName,
-    testRepoName,
-    '/repos/{account_id}/{repo}/pulls?state=all&per_page=1&page=1'
-    // CHECK:: 여기서 created_at 해서 올해로 정리 필요
-  );
-  const staredRepo = useOctokit(
-    testUserName,
-    testRepoName,
-    '/repos/{account_id}/{repo}/stargazers?&per_page=1&page=1'
-    // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
-  );
+  // const userRepoCommits = useOctokit(
+  //   testUserName,
+  //   testRepoName,
+  //   '/repos/{account_id}/{repo}/commits?per_page=1&page=1&committer={account_id}'
+  // );
+
+  // // const userActivity = useOctokit(
+  // //   testUserName,
+  // //   '/repos/{account_id}/standup_log/stats/commit_activity'
+  // // );
+
+  // const userIssues = useOctokit(
+  //   testUserName,
+  //   testRepoName,
+  //   '/issues?fliter=created&state=all&per_page=1&page=1'
+  // );
+  // const userPRs = useOctokit(
+  //   testUserName,
+  //   testRepoName,
+  //   '/repos/{account_id}/{repo}/pulls?state=all&per_page=1&page=1'
+  //   // CHECK:: 여기서 created_at 해서 올해로 정리 필요
+  // );
+  // const staredRepo = useOctokit(
+  //   testUserName,
+  //   testRepoName,
+  //   '/repos/{account_id}/{repo}/stargazers?&per_page=1&page=1'
+  //   // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
+  // );
 
   useEffect(() => {
+    setLoading(false);
     Promise.all([
-      user,
-      userRepo,
-      userRepoCommits,
-      userIssues,
-      userPRs,
-      staredRepo,
-    ]).then(() => {
-      setData({
-        user: user,
-        userRepo: userRepo,
-        userRepoCommits: userRepoCommits,
-        userIssues: userIssues,
-        userPRs: userPRs,
-        staredRepo: staredRepo,
-      });
-      // userRepo.map((ele) => {
-      //   resRepo.stars += ele.stargazers_count;
-      //   resRepo.repoList.push(ele.name);
-      // });
-      setLoading(true);
-    });
-  }, [user]);
+      // user
+      octokit.request('GET {url}', {
+        account_id: testUserName,
+        url: '/users/{account_id}',
+        headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      }),
 
-  console.log(data);
+      // userRepo
+      octokit.request('GET {url}', {
+        account_id: testUserName,
+        url: '/users/{account_id}/repos',
+        headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      }),
+      // getUserRepoList(testUserName),
+
+      // // userRepoCommits
+      // octokit.request('GET {url}', {
+      //   account_id: testUserName,
+      //   repo: testRepoName,
+      //   url: '/repos/{account_id}/{repo}/commits?per_page=1&page=1&committer={account_id}',
+      //   headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      // }),
+
+      // // userIssues
+      // octokit.request('GET {url}', {
+      //   account_id: testUserName,
+      //   url: '/issues?fliter=created&state=all&per_page=1&page=1',
+      //   headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      // }),
+
+      // // userPRs
+      // octokit.request('GET {url}', {
+      //   account_id: testUserName,
+      //   repo: testRepoName,
+      //   url: '/repos/{account_id}/{repo}/pulls?state=all&per_page=1&page=1',
+      //   headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      // }),
+
+      // // staredRepo
+      // octokit.request('GET {url}', {
+      //   account_id: testUserName,
+      //   repo: testRepoName,
+      //   url: '/repos/{account_id}/{repo}/stargazers?&per_page=1&page=1',
+      //   headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      // }),
+    ])
+      .then(
+        ([user, userRepo, userRepoCommits, userIssues, userPRs, staredRepo]) =>
+          Promise.all([
+            user.data,
+            userRepo.data,
+            // userRepoCommits.data,
+            // userIssues.data,
+            // userPRs.data,
+            // staredRepo.data,
+          ])
+      )
+      .then(
+        ([
+          user,
+          userRepo, // userRepoCommits, // userIssues, // userPRs, // staredRepo,
+        ]) => {
+          const userRepolist = userRepo.map((ele) => ele.name);
+          setData({
+            user: user,
+            userRepo: userRepolist,
+            // userRepoCommits: userRepoCommits,
+            // userIssues: userIssues,
+            // userPRs: userPRs,
+            // staredRepo: staredRepo,
+          });
+        }
+      );
+    setLoading(true);
+  }, []);
 
   return (
     <>
@@ -121,9 +175,9 @@ function MainPage() {
             </p>
           </Form>
           {/* 2 - result */}
-          <Result {...data} />
+          <Result loading={loading} {...data} />
           {/* 2 - Outro */}
-          <Outro user={user} />
+          <Outro {...data} />
         </Wrapper>
       </main>
 
