@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { YEAR } from 'utils/constants';
 
 function Result({
+  loading,
   user,
-  userRepo,
   userRepoCommits,
   userIssues,
   userPRs,
@@ -11,18 +11,19 @@ function Result({
 }) {
   // CHECK:: 예외처리 모두 ..
   const created = user ? user.created_at : '9999-99-99';
-  const startDate = created.slice(0, 10);
+  const startDate = created ? created.slice(0, 10) : '9999-99-99';
   const countDate = Math.round(
     (new Date() - new Date(created)) / (1000 * 60 * 60 * 24) + 1
   );
   const userName = user ? user.login : 'test';
-
-  // const countRepo = user ? user.public_repos + user.total_private_repos : '000';
-
-  const countCommits = userRepoCommits ? userRepoCommits.counts : '000';
-  const countIssues = userIssues ? userIssues.counts : '000';
-  const countPR = userPRs ? userPRs.counts : '000';
+  // const countCommits = userRepoCommits ? userRepoCommits.counts : '000';
+  // const countIssues = userIssues ? userIssues.counts : '000';
+  // const countPR = userPRs ? userPRs.counts : '000';
   const countRepo = user ? user.public_repos : '000';
+
+  if (!loading) {
+    return <p> loading . . . </p>;
+  }
 
   return (
     <Section>
@@ -40,13 +41,13 @@ function Result({
         그동안 '<span id='userName'>{userName}</span>'님은
         <ul>
           <li>
-            - <span>{countCommits}</span>개의 커밋
+            - <span>{userRepoCommits}</span>개의 커밋
           </li>
           <li>
-            - <span>{countIssues}</span>개의 이슈
+            - <span>{userIssues}</span>개의 이슈
           </li>
           <li>
-            - <span>{countPR}</span>개의 PR
+            - <span>{userPRs}</span>개의 PR
           </li>
           <li>
             - <span>{countRepo}</span>개의 저장소를 생성하였어요.
