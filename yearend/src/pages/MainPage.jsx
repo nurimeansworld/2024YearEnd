@@ -22,10 +22,12 @@ function MainPage() {
   const [userIssues, setUserIssues] = useState([]);
   const [userPRs, setUserPRs] = useState([]);
 
-  const resRepo = {
-    stars: 0,
-    repoList: [],
-  };
+  const [dataof2024, setDataof2024] = useState([]);
+
+  // const resRepo = {
+  //   stars: 0,
+  //   repoList: [],
+  // };
   // const staredRepo = useOctokit(
   //   testUserName,
   //   testRepoName,
@@ -146,7 +148,6 @@ function MainPage() {
         });
 
         const counts = getAllCounts(data);
-
         return { name: ele, counts: counts };
       } catch (err) {
         console.error(err);
@@ -158,8 +159,57 @@ function MainPage() {
     setUserPRs(sumPRsCounts);
   };
 
+  // 2024년 데이터 따로
+  const getAll2024 = async () => {
+    const reqList = [
+      {
+        // 2024 커밋
+        url: 'commits',
+        q: 'committer-date:2024-01-01..2024-12-31 is:public user:nurimeansworld',
+      },
+      {
+        // 2024 이슈
+        url: 'issues',
+        q: 'type:issue created:2024-01-01..2024-12-31 is:public author:nurimeansworld',
+      },
+      {
+        // 2024 pr
+        url: 'issues',
+        q: 'type:pr created:2021-01-01..2024-12-31 is:public author:nurimeansworld',
+      },
+      {
+        // 2024 저장소
+        url: 'repositories',
+        q: 'created:2024-01-01..2024-12-31 is:public user:nurimeansworld',
+      },
+    ];
+
+    const promise = reqList.map(async (ele) => {
+      try {
+        const { data } = await octokit.request('GET {url}', {
+          url: `/search/${ele.url}`,
+          q: ele.q,
+          per_page: 1,
+          page: 1,
+
+          headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+        });
+
+        return { name: ele.url, counts: data.total_count };
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    const res = await Promise.all(promise);
+    setDataof2024(res);
+  };
+
   useEffect(() => {
     setLoading(false);
+
+    // 2024
+    getAll2024();
 
     // getUserData();
     getUser();
@@ -178,8 +228,9 @@ function MainPage() {
       userIssues: userIssues,
       userPRs: userPRs,
       // staredRepo: staredRepo,
+      dataof2024: dataof2024,
     });
-  }, [user, userRepoCommits, userIssues, userPRs]);
+  }, [user, userRepoCommits, userIssues, userPRs, dataof2024]);
 
   return (
     <>
