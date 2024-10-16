@@ -18,10 +18,13 @@ function MainPage() {
 
   const [user, setUser] = useState([]);
   const [repoList, setRepoList] = useState([]);
+
   const [userRepoCommits, setUserRepoCommits] = useState([]);
   const [userIssues, setUserIssues] = useState([]);
   const [userPRs, setUserPRs] = useState([]);
+  const [staredRepo, setStaredRepo] = useState([]);
 
+  const [dataofAll, setDataofAll] = useState([]);
   const [dataof2024, setDataof2024] = useState([]);
 
   // const resRepo = {
@@ -35,128 +38,80 @@ function MainPage() {
   //   // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
   // );
 
-  const getUser = async () => {
+  const getUser = async (username) => {
     try {
-      const res = await octokit.request('GET {url}', {
-        account_id: testUserName,
+      const { data } = await octokit.request('GET {url}', {
+        account_id: username,
         url: '/users/{account_id}',
         headers: { 'X-GitHub-Api-Version': '2022-11-28' },
       });
-      setUser(res.data);
+      setUser(data);
     } catch (err) {
       console.error(err);
     }
   };
-
-  const getUserRepo = async () => {
+  const getUserRepo = async (username) => {
     try {
-      const res = await octokit.request('GET {url}', {
-        account_id: testUserName,
+      const { data } = await octokit.request('GET {url}', {
+        account_id: username,
         url: '/users/{account_id}/repos',
         headers: { 'X-GitHub-Api-Version': '2022-11-28' },
       });
-      const userRepo = res.data;
+      // console.log('data', data);
 
-      setRepoList(userRepo.map((ele) => ele.name));
+      setRepoList(data.map((ele) => ele.name));
     } catch (err) {
       console.error(err);
     }
   };
 
-  const getUserCommits = async () => {
-    let sumCommitCounts = 0;
-    const promise = repoList.map(async (ele) => {
+  // 모든 데이터
+  const getAllYear = async (username) => {
+    const reqList = [
+      {
+        // 모든 커밋
+        url: 'commits',
+        key: 'commits',
+        q: `committer-date:<=2024-12-31 is:public author:${username}`,
+      },
+      {
+        // 모든 이슈
+        url: 'issues',
+        key: 'issues',
+        q: `type:issue created:<=2024-12-31 is:public author:${username}`,
+      },
+      {
+        // 모든 pr
+        url: 'issues',
+        key: 'pr',
+        q: `type:pr created:<=2024-12-31 is:public author:${username}`,
+      },
+      {
+        // 모든 저장소
+        url: 'repositories',
+        key: 'repositories',
+        q: `created:<=2024-12-31 is:public user:${username}`,
+      },
+    ];
+
+    const promise = reqList.map(async (ele) => {
       try {
-        const data = await octokit.request('GET {url}', {
-          account_id: testUserName,
-          repo: ele,
-          url: '/repos/{account_id}/{repo}/commits?per_page=1&page=1&author={account_id}',
-          // url: '/repos/{account_id}/{repo}/commits?per_page=100&author={account_id}',
+        const { data } = await octokit.request('GET {url}', {
+          url: `/search/${ele.url}`,
+          q: ele.q,
+          // per_page: 1,
+          // page: 1,
 
           headers: { 'X-GitHub-Api-Version': '2022-11-28' },
         });
-
-        const counts = getAllCounts(data);
-
-        return { name: ele, counts: counts };
+        return { name: ele.key, counts: data.total_count };
       } catch (err) {
         console.error(err);
       }
     });
+    const res = await Promise.all(promise);
 
-    const userCommitList = await Promise.all(promise);
-    userCommitList.map((ele) => (sumCommitCounts += ele.counts));
-
-    setUserRepoCommits(sumCommitCounts);
-  };
-
-  const getAllCounts = (res) => {
-    const headerString = res.headers.link;
-    // const numOfPage = headerString.split(',')[1];
-
-    const counts =
-      headerString !== undefined
-        ? headerString
-            .split(',')[1]
-            .match(/&page=[0-9]*[>&]/)
-            .join('')
-            .replace(/[^0-9]/g, '')
-        : 0;
-
-    return Number(counts);
-  };
-
-  const getUserIssues = async () => {
-    let sumIssuesCounts = 0;
-
-    const promise = repoList.map(async (ele) => {
-      try {
-        const data = await octokit.request('GET {url}', {
-          account_id: testUserName,
-          repo: ele,
-          url: '/repos/{account_id}/{repo}/issues?state=all&creator={account_id}&per_page=1&page=1',
-          // url: '/issues?fliter=created&state=all&per_page=1&page=1',
-
-          headers: { 'X-GitHub-Api-Version': '2022-11-28' },
-        });
-
-        const counts = getAllCounts(data);
-
-        return { name: ele, counts: counts };
-      } catch (err) {
-        console.error(err);
-      }
-    });
-    const userIssuesList = await Promise.all(promise);
-    userIssuesList.map((ele) => (sumIssuesCounts += ele.counts));
-
-    setUserIssues(sumIssuesCounts);
-  };
-
-  const getUserPRs = async () => {
-    let sumPRsCounts = 0;
-
-    const promise = repoList.map(async (ele) => {
-      try {
-        const data = await octokit.request('GET {url}', {
-          account_id: testUserName,
-          repo: ele,
-          // CHECK:: 여기서 created_at 해서 올해로 정리 필요
-          url: '/repos/{account_id}/{repo}/pulls?state=all&per_page=1&page=1',
-
-          headers: { 'X-GitHub-Api-Version': '2022-11-28' },
-        });
-
-        const counts = getAllCounts(data);
-        return { name: ele, counts: counts };
-      } catch (err) {
-        console.error(err);
-      }
-    });
-    const userPRsList = await Promise.all(promise);
-    userPRsList.map((ele) => (sumPRsCounts += ele.counts));
-
-    setUserPRs(sumPRsCounts);
+    setDataofAll(res);
   };
 
   // 2024년 데이터 따로
@@ -209,18 +164,43 @@ function MainPage() {
     setDataof2024(res);
   };
 
+  // 올해 자주 사용한 언어 순위
+  const getRepoLang = async (username) => {
+    const promise = repoList.map(async (ele) => {
+      try {
+        const { data } = await octokit.request('GET {url}', {
+          account_id: username,
+          repo: ele,
+          url: '/repos/{account_id}/{repo}/languages',
+
+          headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+        });
+        return data;
+      } catch (err) {
+        console.error(err);
+      }
+    });
+    const res = await Promise.all(promise);
+    // 1. 길이가 없는 항목 제거
+    const filteredRes = res.filter((e) => Object.keys(e).length);
+  };
+
   useEffect(() => {
     setLoading(false);
 
+    // All
+    getAllYear(testUserName);
     // 2024
     getAll2024(testUserName);
+    // 올해 자주 사용한 언어 순위
+    getRepoLang(testUserName);
 
-    // getUserData();
-    getUser();
-    getUserRepo();
-    getUserCommits();
-    getUserIssues();
-    getUserPRs();
+    getUser(testUserName);
+    getUserRepo(testUserName);
+
+    // getUserCommits();
+    // getUserIssues();
+    // getUserPRs();
 
     setLoading(true);
   }, []);
@@ -232,9 +212,10 @@ function MainPage() {
       userIssues: userIssues,
       userPRs: userPRs,
       // staredRepo: staredRepo,
+      dataofAll: dataofAll,
       dataof2024: dataof2024,
     });
-  }, [user, userRepoCommits, userIssues, userPRs, dataof2024]);
+  }, [user, userRepoCommits, userIssues, userPRs, dataof2024, dataofAll]);
 
   return (
     <>

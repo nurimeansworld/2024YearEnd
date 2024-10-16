@@ -8,6 +8,7 @@ function Result({
   userIssues,
   userPRs,
   staredRepo,
+  dataofAll,
   dataof2024,
 }) {
   // CHECK:: 예외처리 모두 ..
@@ -60,16 +61,16 @@ function Result({
         {YEAR}년 올해에는
         <ul>
           <li>
-            - <span>{dataof2024[0].counts}</span>개의 커밋
+            - <span>000</span>개의 커밋
           </li>
           <li>
-            - <span>{dataof2024[1].counts}</span>개의 이슈
+            - <span>000</span>개의 이슈
           </li>
           <li>
-            - <span>{dataof2024[2].counts}</span>개의 PR
+            - <span>000</span>개의 PR
           </li>
           <li>
-            - <span>{dataof2024[3].counts}</span>개의 저장소를 생성하였어요.
+            - <span>000</span>개의 저장소를 생성하였어요.
           </li>
         </ul>
       </div>
