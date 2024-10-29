@@ -26,6 +26,7 @@ function MainPage() {
 
   const [dataofAll, setDataofAll] = useState([]);
   const [dataof2024, setDataof2024] = useState([]);
+  const [dataofLang, setDataofLang] = useState([]);
 
   // const resRepo = {
   //   stars: 0,
@@ -181,8 +182,27 @@ function MainPage() {
       }
     });
     const res = await Promise.all(promise);
+
     // 1. 길이가 없는 항목 제거
     const filteredRes = res.filter((e) => Object.keys(e).length);
+    const totalLang = [];
+    const sotredLang = [];
+
+    // 2. 중복 값 모두 합산
+    for (let i = 0; i < filteredRes.length; i++) {
+      const obj = filteredRes[i];
+      for (let key in obj) {
+        totalLang[key] = (totalLang[key] || 0) + obj[key];
+      }
+    }
+
+    // 3. 내림차순 정렬
+    for (let key in totalLang) {
+      sotredLang.push({ name: key, counts: totalLang[key] });
+    }
+    sotredLang.sort((a, b) => b.counts - a.counts);
+
+    setDataofLang(sotredLang);
   };
 
   useEffect(() => {
@@ -214,8 +234,17 @@ function MainPage() {
       // staredRepo: staredRepo,
       dataofAll: dataofAll,
       dataof2024: dataof2024,
+      dataofLang: dataofLang,
     });
-  }, [user, userRepoCommits, userIssues, userPRs, dataof2024, dataofAll]);
+  }, [
+    user,
+    userRepoCommits,
+    userIssues,
+    userPRs,
+    dataof2024,
+    dataofAll,
+    dataofLang,
+  ]);
 
   return (
     <>
