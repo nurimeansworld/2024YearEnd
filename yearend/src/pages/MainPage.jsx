@@ -24,6 +24,7 @@ function MainPage() {
     sotredLang: [],
     sortedDate: [],
     sortedRepo: [],
+    sortedStar: [],
   });
 
   const getUser = async (username) => {
@@ -55,6 +56,7 @@ function MainPage() {
 
   // 모든 데이터
   const getAllYear = async (username) => {
+    let starred = 0;
     const reqList = [
       {
         // 모든 커밋
@@ -77,7 +79,7 @@ function MainPage() {
       {
         // 모든 저장소
         url: 'repositories',
-        key: 'repositories',
+        key: 'repo',
         q: `created:<=2024-12-31 is:public user:${username}`,
       },
     ];
@@ -92,6 +94,12 @@ function MainPage() {
 
           headers: { 'X-GitHub-Api-Version': '2022-11-28' },
         });
+
+        // starred 카운트
+        if (ele.key === 'repo') {
+          data.items.map((e) => (starred += e.stargazers_count));
+        }
+
         return { name: ele.key, counts: data.total_count };
       } catch (err) {
         console.error(err);
@@ -129,7 +137,7 @@ function MainPage() {
       {
         // 2024 저장소
         url: 'repositories',
-        key: 'repositories',
+        key: 'repo',
         // q: `created:2024-01-01..2024-12-31 is:public user:${username}`,
         q: `created:2024-01-01..2024-12-31 user:${username}`,
       },
