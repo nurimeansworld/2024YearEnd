@@ -26,7 +26,11 @@ function MainPage() {
 
   const [dataofAll, setDataofAll] = useState([]);
   const [dataof2024, setDataof2024] = useState([]);
-  const [dataofLang, setDataofLang] = useState([]);
+  const [mostof2024, setMostof2024] = useState({
+    sotredLang: [],
+    sortedDate: [],
+    sortedRepo: [],
+  });
 
   // const resRepo = {
   //   stars: 0,
@@ -122,25 +126,29 @@ function MainPage() {
         // 2024 커밋
         url: 'commits',
         key: 'commits',
-        q: `committer-date:2024-01-01..2024-12-31 is:public author:${username}`,
+        // q: `committer-date:2024-01-01..2024-12-31 is:public author:${username}`,
+        q: `committer-date:2024-01-01..2024-12-31 author:${username}`,
       },
       {
         // 2024 이슈
         url: 'issues',
         key: 'issues',
-        q: `type:issue created:2024-01-01..2024-12-31 is:public author:${username}`,
+        // q: `type:issue created:2024-01-01..2024-12-31 is:public author:${username}`,
+        q: `type:issue created:2024-01-01..2024-12-31 author:${username}`,
       },
       {
         // 2024 pr
         url: 'issues',
         key: 'pr',
-        q: `type:pr created:2024-01-01..2024-12-31 is:public author:${username}`,
+        // q: `type:pr created:2024-01-01..2024-12-31 is:public author:${username}`,
+        q: `type:pr created:2024-01-01..2024-12-31 author:${username}`,
       },
       {
         // 2024 저장소
         url: 'repositories',
         key: 'repositories',
-        q: `created:2024-01-01..2024-12-31 is:public user:${username}`,
+        // q: `created:2024-01-01..2024-12-31 is:public user:${username}`,
+        q: `created:2024-01-01..2024-12-31 user:${username}`,
       },
     ];
 
@@ -154,7 +162,6 @@ function MainPage() {
 
           headers: { 'X-GitHub-Api-Version': '2022-11-28' },
         });
-
         return { name: ele.key, counts: data.total_count };
       } catch (err) {
         console.error(err);
@@ -185,7 +192,7 @@ function MainPage() {
 
     // 1. 길이가 없는 항목 제거
     const filteredRes = res.filter((e) => Object.keys(e).length);
-    const totalLang = [];
+    const totalLang = {};
     const sotredLang = [];
 
     // 2. 중복 값 모두 합산
@@ -202,7 +209,64 @@ function MainPage() {
     }
     sotredLang.sort((a, b) => b.counts - a.counts);
 
-    setDataofLang(sotredLang);
+    setMostof2024((prevState) => {
+      return { ...prevState, sotredLang: sotredLang };
+    });
+  };
+
+  // 2024년 데이터 따로
+  const getCommits2024 = async (username) => {
+    const dateCounts = {};
+    const repoCounts = {};
+    const sortedDate = [];
+    const sortedRepo = [];
+
+    try {
+      // 1. 2024년 커밋 데이터 가져오기
+      // const commits = await octokit.paginate(octokit.rest.repos.listForUser, {
+      const commits = await octokit.paginate('GET {url}', {
+        url: `/search/commits`,
+        q: `committer-date:2024-01-01..2024-12-31 author:${username}`,
+        per_page: 100,
+
+        headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      });
+
+      // 커밋 날짜별, 저장소별 집계
+      commits.forEach((commit) => {
+        // 1. dateCounts 저장
+        const commitDate = new Date(commit.commit.author.date);
+        // const commitDate = new Date(commit.commit.committer.date);
+
+        const dateKey = commitDate.toISOString().split('T')[0];
+        dateCounts[dateKey] = (dateCounts[dateKey] || 0) + 1;
+
+        // 2. repoCounts 저장
+        const commitRepo = commit.repository.name;
+        repoCounts[commitRepo] = (repoCounts[commitRepo] || 0) + 1;
+      });
+
+      // 3. 내림차순 정렬
+      for (let key in dateCounts) {
+        sortedDate.push({ name: key, counts: dateCounts[key] });
+      }
+      sortedDate.sort((a, b) => b.counts - a.counts);
+
+      for (let key in repoCounts) {
+        sortedRepo.push({ name: key, counts: repoCounts[key] });
+      }
+      sortedRepo.sort((a, b) => b.counts - a.counts);
+    } catch (err) {
+      console.error(err);
+    }
+
+    setMostof2024((prevState) => {
+      return {
+        ...prevState,
+        sortedDate: sortedDate[0],
+        sortedRepo: sortedRepo[0],
+      };
+    });
   };
 
   useEffect(() => {
@@ -214,6 +278,8 @@ function MainPage() {
     getAll2024(testUserName);
     // 올해 자주 사용한 언어 순위
     getRepoLang(testUserName);
+    // 올해 많이 커밋한 날짜, 저장소
+    getCommits2024(testUserName);
 
     getUser(testUserName);
     getUserRepo(testUserName);
@@ -234,7 +300,7 @@ function MainPage() {
       // staredRepo: staredRepo,
       dataofAll: dataofAll,
       dataof2024: dataof2024,
-      dataofLang: dataofLang,
+      mostof2024: mostof2024,
     });
   }, [
     user,
@@ -243,7 +309,7 @@ function MainPage() {
     userPRs,
     dataof2024,
     dataofAll,
-    dataofLang,
+    mostof2024,
   ]);
 
   return (
