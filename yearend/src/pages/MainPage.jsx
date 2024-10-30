@@ -10,19 +10,13 @@ import { COLOR, YEAR } from 'utils/constants';
 import { useState, useEffect } from 'react';
 
 function MainPage() {
-  // const testRepoName = 'strawberry_market';
   const testUserName = 'nurimeansworld';
-
   const [loading, setLoading] = useState(false);
+
   const [data, setData] = useState([]);
 
   const [user, setUser] = useState([]);
   const [repoList, setRepoList] = useState([]);
-
-  const [userRepoCommits, setUserRepoCommits] = useState([]);
-  const [userIssues, setUserIssues] = useState([]);
-  const [userPRs, setUserPRs] = useState([]);
-  const [staredRepo, setStaredRepo] = useState([]);
 
   const [dataofAll, setDataofAll] = useState([]);
   const [dataof2024, setDataof2024] = useState([]);
@@ -31,17 +25,6 @@ function MainPage() {
     sortedDate: [],
     sortedRepo: [],
   });
-
-  // const resRepo = {
-  //   stars: 0,
-  //   repoList: [],
-  // };
-  // const staredRepo = useOctokit(
-  //   testUserName,
-  //   testRepoName,
-  //   '/repos/{account_id}/{repo}/stargazers?&per_page=1&page=1'
-  //   // CHECK:: 여기서 created_at, 모든 repo 확인해서 정리 필요
-  // );
 
   const getUser = async (username) => {
     try {
@@ -172,7 +155,7 @@ function MainPage() {
     setDataof2024(res);
   };
 
-  // 올해 자주 사용한 언어 순위
+  // 2024 자주 사용한 언어 순위
   const getRepoLang = async (username) => {
     const promise = repoList.map(async (ele) => {
       try {
@@ -214,7 +197,7 @@ function MainPage() {
     });
   };
 
-  // 2024년 데이터 따로
+  // 2024 많이 커밋한 날짜, 저장소
   const getCommits2024 = async (username) => {
     const dateCounts = {};
     const repoCounts = {};
@@ -272,21 +255,14 @@ function MainPage() {
   useEffect(() => {
     setLoading(false);
 
-    // All
-    getAllYear(testUserName);
-    // 2024
-    getAll2024(testUserName);
-    // 올해 자주 사용한 언어 순위
-    getRepoLang(testUserName);
-    // 올해 많이 커밋한 날짜, 저장소
-    getCommits2024(testUserName);
+    getAllYear(testUserName); // All
+    getAll2024(testUserName); // 2024
+
+    getRepoLang(testUserName); // 2024 자주 사용한 언어 순위
+    getCommits2024(testUserName); // 2024 많이 커밋한 날짜, 저장소
 
     getUser(testUserName);
     getUserRepo(testUserName);
-
-    // getUserCommits();
-    // getUserIssues();
-    // getUserPRs();
 
     setLoading(true);
   }, []);
@@ -294,23 +270,11 @@ function MainPage() {
   useEffect(() => {
     setData({
       user: user,
-      userRepoCommits: userRepoCommits,
-      userIssues: userIssues,
-      userPRs: userPRs,
-      // staredRepo: staredRepo,
       dataofAll: dataofAll,
       dataof2024: dataof2024,
       mostof2024: mostof2024,
     });
-  }, [
-    user,
-    userRepoCommits,
-    userIssues,
-    userPRs,
-    dataof2024,
-    dataofAll,
-    mostof2024,
-  ]);
+  }, [user, dataof2024, dataofAll, mostof2024]);
 
   return (
     <>
