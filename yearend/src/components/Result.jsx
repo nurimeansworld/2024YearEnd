@@ -1,16 +1,7 @@
 import styled from 'styled-components';
 import { YEAR } from 'utils/constants';
 
-function Result({
-  loading,
-  user,
-  userRepoCommits,
-  userIssues,
-  userPRs,
-  staredRepo,
-  dataofAll,
-  dataof2024,
-}) {
+function Result({ loading, user, dataofAll, dataof2024, mostof2024 }) {
   // CHECK:: 예외처리 모두 ..
   const created = user ? user.created_at : '9999-99-99';
   const startDate = created ? created.slice(0, 10) : '9999-99-99';
@@ -18,14 +9,19 @@ function Result({
     (new Date() - new Date(created)) / (1000 * 60 * 60 * 24) + 1
   );
   const userName = user ? user.login : 'test';
-  // const countCommits = userRepoCommits ? userRepoCommits.counts : '000';
-  // const countIssues = userIssues ? userIssues.counts : '000';
-  // const countPR = userPRs ? userPRs.counts : '000';
   const countRepo = user ? user.public_repos : '000';
+  // console.log('main', dataofAll);
 
   if (!loading) {
     return <p> loading . . . </p>;
   }
+
+  const res = {};
+
+  // dataofAll.forEach((e) => {
+  //   res[e.name] = e.counts;
+  // });
+  // console.log(res);
 
   return (
     <Section>
@@ -43,16 +39,16 @@ function Result({
         그동안 '<span id='userName'>{userName}</span>'님은
         <ul>
           <li>
-            - <span>{userRepoCommits}</span>개의 커밋
+            - <span>{res.commits}</span> 개의 커밋
           </li>
           <li>
-            - <span>{userIssues}</span>개의 이슈
+            - <span>{res.issues}</span>개의 이슈
           </li>
           <li>
-            - <span>{userPRs}</span>개의 PR
+            - <span>{res.pr}</span>개의 PR
           </li>
           <li>
-            - <span>{countRepo}</span>개의 저장소를 생성하였어요.
+            - <span>{res.repo}</span>개의 저장소를 생성하였어요.
           </li>
         </ul>
       </div>
