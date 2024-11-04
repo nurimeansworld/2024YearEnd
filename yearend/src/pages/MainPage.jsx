@@ -5,6 +5,7 @@ import { Header, Footer } from 'components/layout';
 
 import { requestOctokit, octokit } from 'utils/octokit';
 import useYearData from 'utils/useYearData';
+import useUserData from 'utils/useUserData';
 
 import { COLOR, YEAR } from 'utils/constants';
 import { useState, useEffect } from 'react';
@@ -15,8 +16,6 @@ function MainPage() {
   // main에서 세팅
   const [data, setData] = useState([]);
 
-  const [user, setUser] = useState([]);
-  const [repoList, setRepoList] = useState([]);
   const [mostof2024, setMostof2024] = useState({
     sotredLang: [],
     sortedDate: [],
@@ -24,41 +23,21 @@ function MainPage() {
     sortedStar: [],
   });
 
-  // 모든 데이터
-  const { data: dataofAll, loading: loadingAll } = useYearData(
+  const { data: user, loading: loadingUser } = useUserData(testUserName);
+  const { data: repoList, loading: loadingrepoList } = useUserData(
     testUserName,
-    'all'
+    'repos'
   );
+
+  // 모든 데이터
+  const { data: dataofAll, loading: loadingAll } = useYearData(testUserName);
   // 2024년 데이터 따로
   const { data: dataof2024, loading: loading2024 } = useYearData(
     testUserName,
     '2024'
   );
 
-  const getUser = async (username) => {
-    try {
-      const data = await requestOctokit({
-        name: username,
-        url: '/users/{account_id}',
-      });
-      setUser(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getUserRepo = async (username) => {
-    try {
-      const data = await requestOctokit({
-        name: username,
-        url: '/users/{account_id}/repos',
-      });
-      setRepoList(data.map((ele) => ele.name));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  // CHECK:: map 초기값 확인
   // 2024 자주 사용한 언어 순위
   const getRepoLang = async (username) => {
     const promise = repoList.map(async (ele) => {
@@ -156,9 +135,7 @@ function MainPage() {
   };
 
   useEffect(() => {
-    getUser(testUserName);
-    getUserRepo(testUserName);
-    getRepoLang(testUserName); // 2024 자주 사용한 언어 순위
+    repoList && getRepoLang(testUserName); // 2024 자주 사용한 언어 순위
 
     getCommits2024(testUserName); // 2024 많이 커밋한 날짜, 저장소
   }, []);
