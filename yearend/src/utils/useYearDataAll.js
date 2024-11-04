@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
 import { requestOctokit } from 'utils/octokit';
+import { YEAR } from './constants';
 
-function useYearDataAll(username) {
-  const [dataofAll, setDataofAll] = useState([]);
+function useYearDataAll(username, year) {
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+
+  // const [dataofAll, setDataofAll] = useState([]);
+  // const [dataof2024, setDataof2024] = useState([]);
+
+  const query =
+    year === 'all' ? `<=${YEAR}-12-31` : `${year}-01-01..${year}-12-31`;
 
   useEffect(() => {
     setLoading(false);
+
     // 모든 데이터
     const fetchData = async () => {
       let starred = 0;
@@ -16,29 +24,25 @@ function useYearDataAll(username) {
           // 모든 커밋
           url: 'commits',
           key: 'commits',
-          q: `committer-date:<=2024-12-31 is:public author:${username}`, // All
-          // q: `committer-date:2024-01-01..2024-12-31 is:public author:${username}`, // 2024
+          q: `committer-date:${query} is:public author:${username}`,
         },
         {
           // 모든 이슈
           url: 'issues',
           key: 'issues',
-          q: `type:issue created:<=2024-12-31 is:public author:${username}`, // All
-          // q: `type:issue created:2024-01-01..2024-12-31 is:public author:${username}`, // 2024
+          q: `type:issue created:${query} is:public author:${username}`,
         },
         {
           // 모든 pr
           url: 'issues',
           key: 'pr',
-          q: `type:pr created:<=2024-12-31 is:public author:${username}`, // All
-          // q: `type:pr created:2024-01-01..2024-12-31 is:public author:${username}`, // 2024
+          q: `type:pr created:${query} is:public author:${username}`,
         },
         {
           // 모든 저장소
           url: 'repositories',
           key: 'repo',
-          q: `created:<=2024-12-31 is:public user:${username}`, // All
-          // q: `created:2024-01-01..2024-12-31 is:public user:${username}`, // 2024
+          q: `created:${query} is:public user:${username}`,
         },
       ];
 
@@ -66,15 +70,15 @@ function useYearDataAll(username) {
         }
       });
       const res = await Promise.all(promise);
-      setDataofAll(res);
 
+      setData(res);
       setLoading(true);
     };
 
     fetchData();
   }, [username]);
 
-  return { dataofAll, loading };
+  return { data, loading };
 }
 
 export default useYearDataAll;

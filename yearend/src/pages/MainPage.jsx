@@ -17,9 +17,6 @@ function MainPage() {
 
   const [user, setUser] = useState([]);
   const [repoList, setRepoList] = useState([]);
-
-  // const [dataofAll, setDataofAll] = useState([]);
-  const [dataof2024, setDataof2024] = useState([]);
   const [mostof2024, setMostof2024] = useState({
     sotredLang: [],
     sortedDate: [],
@@ -27,9 +24,23 @@ function MainPage() {
     sortedStar: [],
   });
 
+  // 모든 데이터
+  const { data: dataofAll, loading: loadingAll } = useYearDataAll(
+    testUserName,
+    'all'
+  );
+  // 2024년 데이터 따로
+  const { data: dataof2024, loading: loading2024 } = useYearDataAll(
+    testUserName,
+    '2024'
+  );
+
   const getUser = async (username) => {
     try {
-      const data = await requestOctokit(username, '/users/{account_id}');
+      const data = await requestOctokit({
+        name: username,
+        url: '/users/{account_id}',
+      });
       setUser(data);
     } catch (err) {
       console.error(err);
@@ -38,123 +49,25 @@ function MainPage() {
 
   const getUserRepo = async (username) => {
     try {
-      const data = await requestOctokit(username, '/users/{account_id}/repos');
+      const data = await requestOctokit({
+        name: username,
+        url: '/users/{account_id}/repos',
+      });
       setRepoList(data.map((ele) => ele.name));
     } catch (err) {
       console.error(err);
     }
   };
 
-  // 모든 데이터
-  const { dataofAll, loading } = useYearDataAll(testUserName);
-  // const getAllYear = async (username) => {
-  //   let starred = 0;
-  //   const reqList = [
-  //     {
-  //       // 모든 커밋
-  //       url: 'commits',
-  //       key: 'commits',
-  //       q: `committer-date:<=2024-12-31 is:public author:${username}`,
-  //     },
-  //     {
-  //       // 모든 이슈
-  //       url: 'issues',
-  //       key: 'issues',
-  //       q: `type:issue created:<=2024-12-31 is:public author:${username}`,
-  //     },
-  //     {
-  //       // 모든 pr
-  //       url: 'issues',
-  //       key: 'pr',
-  //       q: `type:pr created:<=2024-12-31 is:public author:${username}`,
-  //     },
-  //     {
-  //       // 모든 저장소
-  //       url: 'repositories',
-  //       key: 'repo',
-  //       q: `created:<=2024-12-31 is:public user:${username}`,
-  //     },
-  //   ];
-
-  //   const promise = reqList.map(async (ele) => {
-  //     try {
-  //       const data = await requestOctokit(username, `/search/${ele.url}`, {
-  //         q: ele.q,
-  //       });
-
-  //       // starred 카운트
-  //       if (ele.key === 'repo') {
-  //         data.items.map((e) => (starred += e.stargazers_count));
-  //       }
-
-  //       return { name: ele.key, counts: data.total_count };
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   });
-  //   const res = await Promise.all(promise);
-
-  //   setDataofAll(res);
-  // };
-
-  // 2024년 데이터 따로
-  const getAll2024 = async (username) => {
-    const reqList = [
-      {
-        // 2024 커밋
-        url: 'commits',
-        key: 'commits',
-        // q: `committer-date:2024-01-01..2024-12-31 is:public author:${username}`,
-        q: `committer-date:2024-01-01..2024-12-31 author:${username}`,
-      },
-      {
-        // 2024 이슈
-        url: 'issues',
-        key: 'issues',
-        // q: `type:issue created:2024-01-01..2024-12-31 is:public author:${username}`,
-        q: `type:issue created:2024-01-01..2024-12-31 author:${username}`,
-      },
-      {
-        // 2024 pr
-        url: 'issues',
-        key: 'pr',
-        // q: `type:pr created:2024-01-01..2024-12-31 is:public author:${username}`,
-        q: `type:pr created:2024-01-01..2024-12-31 author:${username}`,
-      },
-      {
-        // 2024 저장소
-        url: 'repositories',
-        key: 'repo',
-        // q: `created:2024-01-01..2024-12-31 is:public user:${username}`,
-        q: `created:2024-01-01..2024-12-31 user:${username}`,
-      },
-    ];
-
-    const promise = reqList.map(async (ele) => {
-      try {
-        const data = await requestOctokit(username, `/search/${ele.url}`, {
-          q: ele.q,
-        });
-
-        return { name: ele.key, counts: data.total_count };
-      } catch (err) {
-        console.error(err);
-      }
-    });
-    const res = await Promise.all(promise);
-
-    setDataof2024(res);
-  };
-
   // 2024 자주 사용한 언어 순위
   const getRepoLang = async (username) => {
     const promise = repoList.map(async (ele) => {
       try {
-        const data = await requestOctokit(
-          username,
-          '/repos/{account_id}/{repo}/languages',
-          { repo: ele }
-        );
+        const data = await requestOctokit({
+          name: username,
+          url: '/repos/{account_id}/{repo}/languages',
+          params: { repo: ele },
+        });
 
         return data;
       } catch (err) {
@@ -245,11 +158,8 @@ function MainPage() {
   useEffect(() => {
     getUser(testUserName);
     getUserRepo(testUserName);
-
-    // getAllYear(testUserName); // All
-    getAll2024(testUserName); // 2024
-
     getRepoLang(testUserName); // 2024 자주 사용한 언어 순위
+
     getCommits2024(testUserName); // 2024 많이 커밋한 날짜, 저장소
   }, []);
 
@@ -302,8 +212,8 @@ function MainPage() {
             </p>
           </Form>
           {/* 2 - result */}
-          <Result loading={loading} {...data} />
-          {/* <Result loading={loading} data={data} /> */}
+          <Result loading={loadingAll} {...data} />
+          {/* <Result loading={loadingAll} data={data} /> */}
           {/* 2 - Outro */}
           <Outro {...data} />
         </Wrapper>
