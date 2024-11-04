@@ -4,9 +4,9 @@ import { Outro, Result } from 'components';
 import { Header, Footer } from 'components/layout';
 import { COLOR, YEAR } from 'utils/constants';
 
-import { requestOctokit, octokit } from 'utils/octokit';
 import { useState, useEffect } from 'react';
 import { useUserData, useYearData } from 'hooks';
+import { requestOctokit, octokit } from 'utils/octokit';
 
 function MainPage() {
   const testUserName = 'nurimeansworld';

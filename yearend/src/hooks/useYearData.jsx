@@ -1,13 +1,11 @@
+import { YEAR } from 'utils/constants';
+
 import { useState, useEffect } from 'react';
 import { requestOctokit } from 'utils/octokit';
-import { YEAR } from './constants';
 
 function useYearData(username, year = 'all') {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-
-  // const [dataofAll, setDataofAll] = useState([]);
-  // const [dataof2024, setDataof2024] = useState([]);
 
   const query =
     year === 'all' ? `<=${YEAR}-12-31` : `${year}-01-01..${year}-12-31`;
