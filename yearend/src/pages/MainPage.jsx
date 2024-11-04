@@ -7,6 +7,7 @@ import { COLOR, YEAR } from 'utils/constants';
 import { useState, useEffect } from 'react';
 import { useUserData, useYearData } from 'hooks';
 import { requestOctokit, paginateOctokit } from 'utils/octokit';
+import { sortCounts } from 'utils/functions';
 
 function MainPage() {
   const testUserName = 'nurimeansworld';
@@ -20,7 +21,7 @@ function MainPage() {
     'repos'
   );
   const [mostof2024, setMostof2024] = useState({
-    sotredLang: [],
+    sortedLang: [],
     sortedDate: [],
     sortedRepo: [],
     sortedStar: [],
@@ -52,68 +53,44 @@ function MainPage() {
     });
     const res = await Promise.all(promise);
 
-    // 1. 길이가 없는 항목 제거
-    const filteredRes = res.filter((e) => Object.keys(e).length);
-    const totalLang = {};
-    const sotredLang = [];
-
-    // 2. 중복 값 모두 합산
-    for (let i = 0; i < filteredRes.length; i++) {
-      const obj = filteredRes[i];
+    const totalLang = res.reduce((acc, obj) => {
+      if (Object.keys(obj).length === 0) return acc; // 1. 길이가 없는 항목 제거
+      // 2. 중복 값 모두 합산
       for (let key in obj) {
-        totalLang[key] = (totalLang[key] || 0) + obj[key];
+        acc[key] = (acc[key] || 0) + obj[key];
       }
-    }
-
+      return acc;
+    }, {});
     // 3. 내림차순 정렬
-    for (let key in totalLang) {
-      sotredLang.push({ name: key, counts: totalLang[key] });
-    }
-    sotredLang.sort((a, b) => b.counts - a.counts);
+    const sortedLang = sortCounts(totalLang);
 
     setMostof2024((prevState) => {
-      return { ...prevState, sotredLang: sotredLang };
+      return { ...prevState, sortedLang: sortedLang };
     });
   };
 
   // 2024 많이 커밋한 날짜, 저장소
   const getCommits2024 = async (username) => {
-    const dateCounts = {};
-    const repoCounts = {};
-    const sortedDate = [];
-    const sortedRepo = [];
+    const dateCounts = {},
+      repoCounts = {};
 
-    try {
-      // 1. 2024년 커밋 데이터 가져오기
-      const commits = await paginateOctokit(username, `/search/commits`);
+    // 1. 2024년 커밋 데이터 가져오기
+    const commits = await paginateOctokit(username, `/search/commits`);
 
-      // 커밋 날짜별, 저장소별 집계
-      commits.forEach((commit) => {
-        // 1. dateCounts 저장
-        const commitDate = new Date(commit.commit.author.date);
-        // const commitDate = new Date(commit.commit.committer.date);
+    // 2. 커밋 날짜별, 저장소별 집계
+    commits.forEach((commit) => {
+      // 1) dateCounts 저장
+      const dateKey = commit.commit.author.date.slice(0, 10);
+      dateCounts[dateKey] = (dateCounts[dateKey] || 0) + 1;
 
-        const dateKey = commitDate.toISOString().split('T')[0];
-        dateCounts[dateKey] = (dateCounts[dateKey] || 0) + 1;
+      // 2) repoCounts 저장
+      const commitRepo = commit.repository.name;
+      repoCounts[commitRepo] = (repoCounts[commitRepo] || 0) + 1;
+    });
 
-        // 2. repoCounts 저장
-        const commitRepo = commit.repository.name;
-        repoCounts[commitRepo] = (repoCounts[commitRepo] || 0) + 1;
-      });
-
-      // 3. 내림차순 정렬
-      for (let key in dateCounts) {
-        sortedDate.push({ name: key, counts: dateCounts[key] });
-      }
-      sortedDate.sort((a, b) => b.counts - a.counts);
-
-      for (let key in repoCounts) {
-        sortedRepo.push({ name: key, counts: repoCounts[key] });
-      }
-      sortedRepo.sort((a, b) => b.counts - a.counts);
-    } catch (err) {
-      console.error(err);
-    }
+    // 3. 내림차순 정렬
+    const sortedDate = sortCounts(dateCounts);
+    const sortedRepo = sortCounts(repoCounts);
 
     setMostof2024((prevState) => {
       return {
