@@ -4,7 +4,7 @@ import { Outro, Result } from 'components';
 import { Header, Footer } from 'components/layout';
 
 import { requestOctokit, octokit } from 'utils/octokit';
-import useYearDataAll from 'utils/useYearDataAll';
+import useYearData from 'utils/useYearData';
 
 import { COLOR, YEAR } from 'utils/constants';
 import { useState, useEffect } from 'react';
@@ -25,12 +25,12 @@ function MainPage() {
   });
 
   // 모든 데이터
-  const { data: dataofAll, loading: loadingAll } = useYearDataAll(
+  const { data: dataofAll, loading: loadingAll } = useYearData(
     testUserName,
     'all'
   );
   // 2024년 데이터 따로
-  const { data: dataof2024, loading: loading2024 } = useYearDataAll(
+  const { data: dataof2024, loading: loading2024 } = useYearData(
     testUserName,
     '2024'
   );

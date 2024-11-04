@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { requestOctokit } from 'utils/octokit';
 import { YEAR } from './constants';
 
-function useYearDataAll(username, year) {
+function useYearData(username, year) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
@@ -81,4 +81,4 @@ function useYearDataAll(username, year) {
   return { data, loading };
 }
 
-export default useYearDataAll;
+export default useYearData;
