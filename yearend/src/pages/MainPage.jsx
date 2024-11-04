@@ -2,13 +2,11 @@ import styled from 'styled-components';
 
 import { Outro, Result } from 'components';
 import { Header, Footer } from 'components/layout';
+import { COLOR, YEAR } from 'utils/constants';
 
 import { requestOctokit, octokit } from 'utils/octokit';
-import useYearData from 'utils/useYearData';
-import useUserData from 'utils/useUserData';
-
-import { COLOR, YEAR } from 'utils/constants';
 import { useState, useEffect } from 'react';
+import { useUserData, useYearData } from 'hooks';
 
 function MainPage() {
   const testUserName = 'nurimeansworld';

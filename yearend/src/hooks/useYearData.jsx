@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { requestOctokit } from 'utils/octokit';
 import { YEAR } from './constants';
 
-function useYearData(username, year) {
+function useYearData(username, year = 'all') {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
