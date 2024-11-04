@@ -6,7 +6,7 @@ import { COLOR, YEAR } from 'utils/constants';
 
 import { useState, useEffect } from 'react';
 import { useUserData, useYearData } from 'hooks';
-import { requestOctokit, octokit } from 'utils/octokit';
+import { requestOctokit, paginateOctokit } from 'utils/octokit';
 
 function MainPage() {
   const testUserName = 'nurimeansworld';
@@ -14,18 +14,17 @@ function MainPage() {
   // main에서 세팅
   const [data, setData] = useState([]);
 
+  const { data: user, loading: loadingUser } = useUserData(testUserName);
+  const { data: repoList, loading: loadingrepoList } = useUserData(
+    testUserName,
+    'repos'
+  );
   const [mostof2024, setMostof2024] = useState({
     sotredLang: [],
     sortedDate: [],
     sortedRepo: [],
     sortedStar: [],
   });
-
-  const { data: user, loading: loadingUser } = useUserData(testUserName);
-  const { data: repoList, loading: loadingrepoList } = useUserData(
-    testUserName,
-    'repos'
-  );
 
   // 모든 데이터
   const { data: dataofAll, loading: loadingAll } = useYearData(testUserName);
@@ -86,14 +85,7 @@ function MainPage() {
 
     try {
       // 1. 2024년 커밋 데이터 가져오기
-      // const commits = await octokit.paginate(octokit.rest.repos.listForUser, {
-      const commits = await octokit.paginate('GET {url}', {
-        url: `/search/commits`,
-        q: `committer-date:2024-01-01..2024-12-31 author:${username}`,
-        per_page: 100,
-
-        headers: { 'X-GitHub-Api-Version': '2022-11-28' },
-      });
+      const commits = await paginateOctokit(username, `/search/commits`);
 
       // 커밋 날짜별, 저장소별 집계
       commits.forEach((commit) => {
