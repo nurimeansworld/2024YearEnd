@@ -8,18 +8,14 @@ import { useState, useEffect } from 'react';
 import { useUserData, useYearData } from 'hooks';
 import { requestOctokit, paginateOctokit } from 'utils/octokit';
 import { sortCounts } from 'utils/functions';
+// import useLangData from 'hooks/useLangData';
 
 function MainPage() {
   const testUserName = 'nurimeansworld';
 
   // main에서 세팅
   const [data, setData] = useState([]);
-
-  const { data: user, loading: loadingUser } = useUserData(testUserName);
-  const { data: repoList, loading: loadingrepoList } = useUserData(
-    testUserName,
-    'repos'
-  );
+  const [loading, setLoading] = useState(false);
   const [mostof2024, setMostof2024] = useState({
     sortedLang: [],
     sortedDate: [],
@@ -27,16 +23,19 @@ function MainPage() {
     sortedStar: [],
   });
 
-  // 모든 데이터
+  const { data: user, loading: loadingUser } = useUserData(testUserName);
+  const { data: repoList, loading: loadingrepoList } = useUserData(
+    testUserName,
+    'repos'
+  );
   const { data: dataofAll, loading: loadingAll } = useYearData(testUserName);
-  // 2024년 데이터 따로
   const { data: dataof2024, loading: loading2024 } = useYearData(
     testUserName,
     '2024'
   );
 
-  // CHECK:: map 초기값 확인
   // 2024 자주 사용한 언어 순위
+  // const { langData, loadingLang } = useLangData(testUserName, repoList);
   const getRepoLang = async (username) => {
     const promise = repoList.map(async (ele) => {
       try {
@@ -102,10 +101,15 @@ function MainPage() {
   };
 
   useEffect(() => {
-    repoList && getRepoLang(testUserName); // 2024 자주 사용한 언어 순위
-
+    repoList?.length > 0 && getRepoLang(testUserName);
     getCommits2024(testUserName); // 2024 많이 커밋한 날짜, 저장소
-  }, []);
+  }, [repoList]);
+
+  useEffect(() => {
+    // TODO:: mostof2024 값까지 업데이트 후 loading 업데이트 필요
+    if (loadingAll && loading2024 && loadingUser && loadingrepoList)
+      setLoading(true);
+  }, [loadingAll, loading2024, loadingUser, loadingrepoList]);
 
   useEffect(() => {
     setData({
@@ -156,7 +160,7 @@ function MainPage() {
             </p>
           </Form>
           {/* 2 - result */}
-          <Result loading={loadingAll} {...data} />
+          <Result loading={loading} {...data} />
           {/* <Result loading={loadingAll} data={data} /> */}
           {/* 2 - Outro */}
           <Outro {...data} />
