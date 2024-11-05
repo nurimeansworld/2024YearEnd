@@ -3,7 +3,11 @@ import { requestOctokit } from 'utils/octokit';
 
 function useUserData(username, type) {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    created_at: '9999-99-99',
+    login: 'test',
+    public_repos: '000',
+  });
 
   const url = type ? `/users/{account_id}/${type}` : '/users/{account_id}';
 
