@@ -61,7 +61,7 @@ function MainPage() {
       return acc;
     }, {});
     // 3. 내림차순 정렬
-    const sortedLang = sortCounts(totalLang);
+    const sortedLang = sortCounts(totalLang).slice(0, 5);
 
     setMostof2024((prevState) => {
       return { ...prevState, sortedLang: sortedLang };
