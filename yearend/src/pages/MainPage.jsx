@@ -1,10 +1,9 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 
+import { COLOR, YEAR } from 'utils/constants';
 import { Outro, Result } from 'components';
 import { Header, Footer } from 'components/layout';
-import { COLOR, YEAR } from 'utils/constants';
-
-import { useState, useEffect } from 'react';
 import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
 
 function MainPage() {
@@ -24,14 +23,16 @@ function MainPage() {
     useCommitData(testUserName);
 
   useEffect(() => {
-    if (
-      loadingAll &&
-      loading2024 &&
-      loadingUser &&
-      loadingLang &&
-      loadingCommit
-    )
+    const loadingList = [
+      loadingAll,
+      loading2024,
+      loadingUser,
+      loadingLang,
+      loadingCommit,
+    ];
+    if (loadingList.every(Boolean)) {
       setLoading(true);
+    }
   }, [loadingAll, loading2024, loadingUser, loadingLang, loadingCommit]);
 
   useEffect(() => {

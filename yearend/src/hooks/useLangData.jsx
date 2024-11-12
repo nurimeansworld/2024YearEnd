@@ -6,7 +6,6 @@ import { useUserData } from 'hooks';
 function useLangData(username) {
   const [loading, setLoading] = useState(false);
   const [data, setLangData] = useState();
-
   const { data: repoList, loading: loadingrepoList } = useUserData(
     username,
     'repos'
@@ -32,7 +31,8 @@ function useLangData(username) {
       const res = await Promise.all(promise);
 
       const totalLang = res.reduce((acc, obj) => {
-        if (Object.keys(obj).length === 0) return acc; // 1. 길이가 없는 항목 제거
+        // 1. 길이가 없는 항목 제거
+        if (Object.keys(obj).length === 0) return acc;
         // 2. 중복 값 모두 합산
         for (let key in obj) {
           acc[key] = (acc[key] || 0) + obj[key];

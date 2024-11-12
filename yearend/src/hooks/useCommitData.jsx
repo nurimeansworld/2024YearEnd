@@ -7,9 +7,9 @@ function useCommitData(username) {
   const [data, setData] = useState();
 
   useEffect(() => {
-    // 2024 많이 커밋한 날짜, 저장소
     const getCommits2024 = async () => {
       setLoading(false);
+
       const dateCounts = {},
         repoCounts = {};
 
@@ -32,7 +32,6 @@ function useCommitData(username) {
       const sortedRepo = sortCounts(repoCounts);
 
       setData({ date: sortedDate[0], repo: sortedRepo[0] });
-
       setLoading(true);
     };
 

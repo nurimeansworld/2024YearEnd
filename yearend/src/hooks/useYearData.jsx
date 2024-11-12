@@ -57,10 +57,8 @@ function useYearData(username, year = 'all') {
           // starred 카운트
           if (ele.key === 'repo') {
             data.items.map((e) => (starred += e.stargazers_count));
+            // starred += data.items.reduce((acc, item) => acc + item.stargazers_count,0);
           }
-          // if (ele.key === 'repo') {
-          //   starred += data.items.reduce((acc, item) => acc + item.stargazers_count,0);
-          // }
 
           return { name: ele.key, counts: data.total_count };
         } catch (err) {
