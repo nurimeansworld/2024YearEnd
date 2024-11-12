@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 import { requestOctokit } from 'utils/octokit';
 import { sortCounts } from 'utils/functions';
+import { useUserData } from 'hooks';
 
-function useLangData(username, repoList) {
+function useLangData(username) {
   const [loading, setLoading] = useState(false);
-  const [langData, setLangData] = useState();
+  const [data, setLangData] = useState();
 
-  console.log('useLangData');
+  const { data: repoList, loading: loadingrepoList } = useUserData(
+    username,
+    'repos'
+  );
 
   useEffect(() => {
-    setLoading(false);
-
     const getRepoLang = async () => {
-      const promise = repoList.map(async (ele) => {
+      setLoading(false);
+
+      const promise = repoList?.map(async (ele) => {
         try {
           const data = await requestOctokit({
             name: username,
@@ -40,13 +44,13 @@ function useLangData(username, repoList) {
       const sortedLang = sortCounts(totalLang);
 
       setLangData(sortedLang);
-
       setLoading(true);
     };
 
-    if (repoList?.length > 0) getRepoLang();
-  }, []);
+    loadingrepoList && getRepoLang();
+  }, [repoList]);
 
-  return { langData, loading };
+  return { data, loading };
 }
+
 export default useLangData;

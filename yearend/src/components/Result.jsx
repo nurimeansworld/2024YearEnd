@@ -1,23 +1,16 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
 import { YEAR } from 'utils/constants';
 
 function Result({
   loading,
-  user = { created_at: '9999-99-99', login: 'test', public_repos: '000' },
+  user,
   dataofAll = [{}],
   dataof2024 = [{}],
   mostof2024 = [{}],
 }) {
-  // CHECK:: 예외처리 모두 ..
-  // const userName = user ? user.login : 'test';
-  // const created = user.length !== 0 ? user.created_at : '9999-99-99';
-  // const countRepo = user ? user.public_repos : '000';
-  // console.log('main', dataofAll);
-
-  const startDate = user.created_at.slice(0, 10);
+  const startDate = user?.created_at.slice(0, 10);
   const countDate = Math.round(
-    (new Date() - new Date(user.created_at)) / (1000 * 60 * 60 * 24) + 1
+    (new Date() - new Date(user?.created_at)) / (1000 * 60 * 60 * 24) + 1
   );
 
   const resAll = [];
@@ -31,15 +24,6 @@ function Result({
   });
 
   const { sortedDate, sortedLang, sortedRepo } = mostof2024;
-
-  console.log(
-    'sortedDate:',
-    sortedDate,
-    'sortedLang:',
-    sortedLang,
-    'sortedRepo:',
-    sortedRepo
-  );
 
   if (!loading) {
     return <p> loading . . . </p>;
@@ -114,14 +98,14 @@ function Result({
 
       <div>
         올해 제일 많은 커밋을 한 날은 <br />
-        <span>{sortedDate.name}</span>로 총 <span>{sortedDate.counts}</span>개의
-        커밋을 하셨어요!
+        <span>{sortedDate?.name}</span>로 총 <span>{sortedDate?.counts}</span>
+        개의 커밋을 하셨어요!
       </div>
 
       <div>
         올해 제일 많은 커밋을 한 저장소는 <br />
-        <span>{sortedRepo.name}</span>로 총 <span>{sortedRepo.counts}</span>개의
-        커밋을 하셨어요!
+        <span>{sortedRepo?.name}</span>로 총 <span>{sortedRepo?.counts}</span>
+        개의 커밋을 하셨어요!
       </div>
 
       <div>

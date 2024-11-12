@@ -5,120 +5,47 @@ import { Header, Footer } from 'components/layout';
 import { COLOR, YEAR } from 'utils/constants';
 
 import { useState, useEffect } from 'react';
-import { useUserData, useYearData } from 'hooks';
-import { requestOctokit, paginateOctokit } from 'utils/octokit';
-import { sortCounts } from 'utils/functions';
-// import useLangData from 'hooks/useLangData';
+import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
 
 function MainPage() {
   const testUserName = 'nurimeansworld';
 
-  // main에서 세팅
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [mostof2024, setMostof2024] = useState({
-    sortedLang: [],
-    sortedDate: [],
-    sortedRepo: [],
-    sortedStar: [],
-  });
 
   const { data: user, loading: loadingUser } = useUserData(testUserName);
-  const { data: repoList, loading: loadingrepoList } = useUserData(
-    testUserName,
-    'repos'
-  );
   const { data: dataofAll, loading: loadingAll } = useYearData(testUserName);
   const { data: dataof2024, loading: loading2024 } = useYearData(
     testUserName,
     '2024'
   );
-
-  // 2024 자주 사용한 언어 순위
-  // const { langData, loadingLang } = useLangData(testUserName, repoList);
-  const getRepoLang = async (username) => {
-    const promise = repoList.map(async (ele) => {
-      try {
-        const data = await requestOctokit({
-          name: username,
-          url: '/repos/{account_id}/{repo}/languages',
-          params: { repo: ele },
-        });
-
-        return data;
-      } catch (err) {
-        console.error(err);
-      }
-    });
-    const res = await Promise.all(promise);
-
-    const totalLang = res.reduce((acc, obj) => {
-      if (Object.keys(obj).length === 0) return acc; // 1. 길이가 없는 항목 제거
-      // 2. 중복 값 모두 합산
-      for (let key in obj) {
-        acc[key] = (acc[key] || 0) + obj[key];
-      }
-      return acc;
-    }, {});
-    // 3. 내림차순 정렬
-    const sortedLang = sortCounts(totalLang).slice(0, 5);
-
-    setMostof2024((prevState) => {
-      return { ...prevState, sortedLang: sortedLang };
-    });
-  };
-
-  // 2024 많이 커밋한 날짜, 저장소
-  const getCommits2024 = async (username) => {
-    const dateCounts = {},
-      repoCounts = {};
-
-    // 1. 2024년 커밋 데이터 가져오기
-    const commits = await paginateOctokit(username, `/search/commits`);
-
-    // 2. 커밋 날짜별, 저장소별 집계
-    commits.forEach((commit) => {
-      // 1) dateCounts 저장
-      const dateKey = commit.commit.author.date.slice(0, 10);
-      dateCounts[dateKey] = (dateCounts[dateKey] || 0) + 1;
-
-      // 2) repoCounts 저장
-      const commitRepo = commit.repository.name;
-      repoCounts[commitRepo] = (repoCounts[commitRepo] || 0) + 1;
-    });
-
-    // 3. 내림차순 정렬
-    const sortedDate = sortCounts(dateCounts);
-    const sortedRepo = sortCounts(repoCounts);
-
-    setMostof2024((prevState) => {
-      return {
-        ...prevState,
-        sortedDate: sortedDate[0],
-        sortedRepo: sortedRepo[0],
-      };
-    });
-  };
+  const { data: langData, loading: loadingLang } = useLangData(testUserName);
+  const { data: commitData, loading: loadingCommit } =
+    useCommitData(testUserName);
 
   useEffect(() => {
-    repoList?.length > 0 && getRepoLang(testUserName);
-    getCommits2024(testUserName); // 2024 많이 커밋한 날짜, 저장소
-  }, [repoList]);
-
-  useEffect(() => {
-    // TODO:: mostof2024 값까지 업데이트 후 loading 업데이트 필요
-    if (loadingAll && loading2024 && loadingUser && loadingrepoList)
+    if (
+      loadingAll &&
+      loading2024 &&
+      loadingUser &&
+      loadingLang &&
+      loadingCommit
+    )
       setLoading(true);
-  }, [loadingAll, loading2024, loadingUser, loadingrepoList]);
+  }, [loadingAll, loading2024, loadingUser, loadingLang, loadingCommit]);
 
   useEffect(() => {
     setData({
       user: user,
       dataofAll: dataofAll,
       dataof2024: dataof2024,
-      mostof2024: mostof2024,
+      mostof2024: {
+        sortedDate: commitData?.date,
+        sortedRepo: commitData?.repo,
+        sortedLang: langData,
+      },
     });
-  }, [user, dataof2024, dataofAll, mostof2024]);
+  }, [user, dataofAll, dataof2024, commitData, langData]);
 
   return (
     <>
