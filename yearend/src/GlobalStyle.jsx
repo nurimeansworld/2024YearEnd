@@ -51,7 +51,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   span {
-    color: red;
+    background: #5c4450;
   }
 
   .sr-only {

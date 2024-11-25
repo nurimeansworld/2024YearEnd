@@ -8,6 +8,7 @@ function Result({
   dataof2024 = [{}],
   mostof2024 = [{}],
 }) {
+  const name = user?.login;
   const startDate = user?.created_at.slice(0, 10);
   const countDate = Math.round(
     (new Date() - new Date(user?.created_at)) / (1000 * 60 * 60 * 24) + 1
@@ -25,14 +26,13 @@ function Result({
 
   const { sortedDate, sortedLang, sortedRepo } = mostof2024;
 
-  if (!loading) {
-    return <p> loading . . . </p>;
-  }
-  return (
+  return loading ? (
+    <p> loading . . . </p>
+  ) : (
     <Section>
       <h2 className='sr-only'>연말결산 결과</h2>
       <p className='userName'>
-        username : '<span id='userName'>{user.login}</span>'
+        username : '<span id='userName'>{name}</span>'
       </p>
       <div>
         GitHub와 함께 개발 여정을 시작한 <br />
@@ -41,7 +41,7 @@ function Result({
       </div>
 
       <div>
-        그동안 '<span id='userName'>{user.login}</span>'님은
+        그동안 '<span id='userName'>{name}</span>'님은
         <ul>
           <li>
             - <span>{resAll.commits}</span> 개의 커밋
@@ -108,10 +108,10 @@ function Result({
         개의 커밋을 하셨어요!
       </div>
 
-      <div>
+      {/* <div>
         올해 제일 많은 스타를 받은 저장소는 <br />
         <span>'0000'</span>로 총 <span>'00'</span>개의 스타를 받으셨어요!
-      </div>
+      </div> */}
     </Section>
   );
 }
