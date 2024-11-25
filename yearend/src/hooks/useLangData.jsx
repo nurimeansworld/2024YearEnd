@@ -4,7 +4,7 @@ import { sortCounts } from 'utils/functions';
 import { useUserData } from 'hooks';
 
 function useLangData(username) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setLangData] = useState();
   const { data: repoList, loading: loadingrepoList } = useUserData(
     username,
@@ -13,8 +13,9 @@ function useLangData(username) {
 
   useEffect(() => {
     const getRepoLang = async () => {
-      setLoading(false);
+      if (repoList.length === undefined) return;
 
+      setLoading(true);
       const promise = repoList?.map(async (ele) => {
         try {
           const data = await requestOctokit({
@@ -44,11 +45,11 @@ function useLangData(username) {
       const sortedLang = sortCounts(totalLang);
 
       setLangData(sortedLang);
-      setLoading(true);
+      setLoading(false);
     };
 
-    loadingrepoList && getRepoLang();
-  }, [repoList]);
+    getRepoLang();
+  }, [loadingrepoList]);
 
   return { data, loading };
 }

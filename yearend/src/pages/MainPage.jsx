@@ -9,33 +9,58 @@ import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
 function MainPage() {
   const testUserName = 'nurimeansworld';
 
+  const [name, setName] = useState('nurimeansworld');
+
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const { data: user, loading: loadingUser } = useUserData(testUserName);
-  const { data: dataofAll, loading: loadingAll } = useYearData(testUserName);
-  const { data: dataof2024, loading: loading2024 } = useYearData(
-    testUserName,
-    '2024'
-  );
-  const { data: langData, loading: loadingLang } = useLangData(testUserName);
-  const { data: commitData, loading: loadingCommit } =
-    useCommitData(testUserName);
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      // var reg = /^[A-Za-z0-9]{4,39}$/;
 
-  useEffect(() => {
-    const loadingList = [
-      loadingAll,
-      loading2024,
-      loadingUser,
-      loadingLang,
-      loadingCommit,
-    ];
-    if (loadingList.every(Boolean)) {
-      setLoading(true);
+      // return !reg.test(e.target.value)
+      //   ? alert('올바른 형식으로 입력해주세요.')
+      //   : setName(e.target.value);
+      setName(e.target.value);
+
+      console.log(e.target.value);
+
+      // CHECK:: loading 모두 완료되기 전 까지 비활성화
     }
-  }, [loadingAll, loading2024, loadingUser, loadingLang, loadingCommit]);
+  };
+
+  // name이 빈 값이었다가 setName으로 state update 되었을 때
+  const { data: user, loading: loadingUser } = useUserData(name);
+  const { data: dataofAll, loading: loadingAll } = useYearData(name);
+  const { data: dataof2024, loading: loading2024 } = useYearData(name, '2024');
+  const { data: langData, loading: loadingLang } = useLangData(name);
+  const { data: commitData, loading: loadingCommit } = useCommitData(name);
 
   useEffect(() => {
+    const loadingList = {
+      loadingAll: loadingAll,
+      loading2024: loading2024,
+      loadingUser: loadingUser,
+      loadingLang: loadingLang,
+      loadingCommit: loadingCommit,
+    };
+    // if (name) {
+    setLoading(
+      loadingAll || loading2024 || loadingUser || loadingLang || loadingCommit
+    );
+    // }
+
+    if (process.env.NODE_ENV !== 'production') {
+      var consoleLoading = '';
+      for (var e in loadingList) {
+        consoleLoading += loadingList[e] == false ? `${e}, ` : '';
+      }
+      console.log('update 완료:', consoleLoading);
+    }
+  }, [name, loadingAll, loading2024, loadingUser, loadingLang, loadingCommit]);
+
+  useEffect(() => {
+    // if (!loading) {
     setData({
       user: user,
       dataofAll: dataofAll,
@@ -46,11 +71,12 @@ function MainPage() {
         sortedLang: langData,
       },
     });
-  }, [user, dataofAll, dataof2024, commitData, langData]);
+    // }
+  }, [loading, name, user, dataofAll, dataof2024, commitData, langData]);
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
 
       <main>
         <Wrapper>
@@ -79,23 +105,46 @@ function MainPage() {
           {/* 1 - input text */}
           <Form>
             <p>
-              GitHub 아이디(username)을 입력하세요 :
-              <input type='text' name='username' />
+              GitHub 아이디(username)을 입력하세요 . . . <br />
+              (최소 4자 이상의 영문 or 숫자 조합)
+              <br />
+              <input
+                type='text'
+                name='username'
+                placeholder='영문 or 숫자 조합'
+                maxLength='40'
+                onKeyDown={handleEnter}
+              />
             </p>
-            <p>
-              입력하신 아이디(username)는 '<span id='userName'>___</span>'
-              입니다.
-            </p>
+            {/* <span> alert('올바른 형식으로 입력해주세요.') </span> */}
+            {name && (
+              <p>
+                입력하신 아이디(username)는 '<span id='userName'>{name}</span>'
+                입니다.
+              </p>
+            )}
           </Form>
           {/* 2 - result */}
-          <Result loading={loading} {...data} />
-          {/* <Result loading={loadingAll} data={data} /> */}
-          {/* 2 - Outro */}
-          <Outro {...data} />
+          {/* {data && (
+            <>
+              <Result loading={loading} {...data} />
+              <Outro {...data} />
+            </>
+          )} */}
+          {loading ? (
+            <p> 안보여야함 </p>
+          ) : data ? (
+            <>
+              <Result loading={loading} {...data} />
+              <Outro {...data} />
+            </>
+          ) : (
+            <p> no data . . . </p>
+          )}
         </Wrapper>
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
@@ -185,6 +234,10 @@ const Form = styled.section`
     content: '> ';
     width: 1rem;
     height: 1rem;
+  }
+  #userName {
+    border-width: 0 0 1px;
+    border-style: dashed;
   }
 `;
 

@@ -3,12 +3,14 @@ import { paginateOctokit } from 'utils/octokit';
 import { sortCounts } from 'utils/functions';
 
 function useCommitData(username) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
 
   useEffect(() => {
+    if (!username) return;
+
     const getCommits2024 = async () => {
-      setLoading(false);
+      setLoading(true);
 
       const dateCounts = {},
         repoCounts = {};
@@ -32,7 +34,7 @@ function useCommitData(username) {
       const sortedRepo = sortCounts(repoCounts);
 
       setData({ date: sortedDate[0], repo: sortedRepo[0] });
-      setLoading(true);
+      setLoading(false);
     };
 
     getCommits2024();
