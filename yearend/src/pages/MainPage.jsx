@@ -24,7 +24,6 @@ function MainPage() {
       setName(e.target.value);
 
       console.log(e.target.value);
-
       // CHECK:: loading 모두 완료되기 전 까지 비활성화
     }
   };
@@ -125,21 +124,17 @@ function MainPage() {
             )}
           </Form>
           {/* 2 - result */}
-          {/* {data && (
-            <>
-              <Result loading={loading} {...data} />
-              <Outro {...data} />
-            </>
-          )} */}
-          {loading ? (
-            <p> 안보여야함 </p>
-          ) : data ? (
-            <>
-              <Result loading={loading} {...data} />
-              <Outro {...data} />
-            </>
+          {name ? (
+            loading ? (
+              <p> loading . . . </p>
+            ) : (
+              <>
+                <Result loading={loading} {...data} />
+                <Outro {...data} />
+              </>
+            )
           ) : (
-            <p> no data . . . </p>
+            <></>
           )}
         </Wrapper>
       </main>
