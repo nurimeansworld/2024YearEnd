@@ -1,7 +1,9 @@
+import { YEAR } from 'utils/constants';
+
 function Header() {
   return (
     <header className='App-header'>
-      <h1>2024YearEnd✨</h1>
+      <h1>{YEAR}YearEnd✨</h1>
     </header>
   );
 }
