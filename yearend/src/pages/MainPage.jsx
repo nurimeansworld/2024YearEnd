@@ -11,14 +11,13 @@ function MainPage() {
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
       // var reg = /^[A-Za-z0-9]{4,39}$/;
+
       // return !reg.test(e.target.value)
       //   ? alert('올바른 형식으로 입력해주세요.')
       //   : setName(e.target.value);
       setName(e.target.value);
 
-      console.log(e.target.value);
       // CHECK:: loading 모두 완료되기 전 까지 비활성화
-      // handleTimeout();
     }
   };
 
