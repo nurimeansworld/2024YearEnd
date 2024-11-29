@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { YEAR } from 'utils/constants';
 import { validateID, checkExistID } from 'utils/functions';
+import { Title } from 'components/layout';
 
 function MainPage() {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ function MainPage() {
 
   return (
     <>
+      <Title />
       {/* 1 - intro */}
       <Intro>
         <h2 className='sr-only'>연말결산 소개</h2>
@@ -77,7 +79,6 @@ function MainPage() {
     </>
   );
 }
-
 const Intro = styled.section`
   p {
     position: relative;

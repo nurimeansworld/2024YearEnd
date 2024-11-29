@@ -1,26 +1,14 @@
 import styled from 'styled-components';
 
 import { Header, Footer } from './';
-import { COLOR, YEAR } from 'utils/constants';
+import { COLOR } from 'utils/constants';
 
 function Layout({ children }) {
   return (
     <>
       <Header />
       <main>
-        <Wrapper>
-          {/* title */}
-          <Title>
-            <p>******************</p>
-            <h2>
-              {YEAR}
-              <br />
-              GitHub 연말결산
-            </h2>
-            <p>******************</p>
-          </Title>
-          {children}
-        </Wrapper>
+        <Wrapper>{children}</Wrapper>
       </main>
       <Footer />
     </>
@@ -54,11 +42,6 @@ const Wrapper = styled.section`
   input:focus {
     color: inherit;
   }
-`;
-const Title = styled.section`
-  text-align: center;
-  line-height: 5rem;
-  letter-spacing: 1.5rem;
 `;
 
 export default Layout;

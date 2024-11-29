@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Outro, Result } from 'components';
 import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
+import { Title } from 'components/layout';
 
 function ResultPage() {
   const location = useLocation();
@@ -61,6 +62,7 @@ function ResultPage() {
 
   return (
     <>
+      <Title />
       {name ? (
         loading ? (
           <p> loading . . . </p>
