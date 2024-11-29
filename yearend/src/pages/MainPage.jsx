@@ -3,33 +3,37 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { YEAR } from 'utils/constants';
+import { validateID, checkExistID } from 'utils/functions';
 
 function MainPage() {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
+  const [userID, setUserID] = useState('');
 
-  const handleEnter = (e) => {
+  const handleEnter = async (e) => {
     if (e.key === 'Enter') {
-      // var reg = /^[A-Za-z0-9]{4,39}$/;
+      // 1. 유효성 검사
+      const errorMessage = validateID(e.target.value);
+      if (errorMessage) {
+        alert(errorMessage);
+        return;
+      }
 
-      // return !reg.test(e.target.value)
-      //   ? alert('올바른 형식으로 입력해주세요.')
-      //   : setName(e.target.value);
-      setName(e.target.value);
-
-      // CHECK:: loading 모두 완료되기 전 까지 비활성화
+      // 2. username 실존 검사
+      const checkUser = await checkExistID(e.target.value);
+      return !checkUser
+        ? alert('유효한 ID가 아닙니다.')
+        : setUserID(e.target.value);
     }
   };
-
   const handleTimeout = () => {
     setTimeout(() => {
-      navigate('/result', { state: name });
+      navigate('/result', { state: userID });
     }, 5000);
   };
 
   useEffect(() => {
-    name && handleTimeout();
-  }, [name]);
+    userID && handleTimeout();
+  }, [userID]);
 
   return (
     <>
@@ -46,7 +50,7 @@ function MainPage() {
       {/* 1 - input text */}
       <Form>
         <p>
-          GitHub 아이디(username)을 입력하세요 . . . <br />
+          GitHub ID(username)를 입력하세요 . . . <br />
           (최소 4자 이상의 영문 or 숫자 조합)
           <br />
           <input
@@ -57,11 +61,11 @@ function MainPage() {
             onKeyDown={handleEnter}
           />
         </p>
-        {/* <span> alert('올바른 형식으로 입력해주세요.') </span> */}
-        {name && (
+        <button>ㄴEnter</button>
+        {userID && (
           <>
             <p>
-              입력하신 아이디(username)는 '<span id='userName'>{name}</span>'
+              입력하신 아이디(username)는 '<span id='userName'>{userID}</span>'
               입니다.
             </p>
             <p>5초 뒤 이동합니다 . . .</p>

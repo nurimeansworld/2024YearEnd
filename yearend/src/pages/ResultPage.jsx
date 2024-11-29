@@ -5,6 +5,10 @@ import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
 
 function ResultPage() {
   const location = useLocation();
+  if (!location.state) {
+    alert('입력된 이름이 없습니다. 다시 입력해주세요.');
+    window.location.href = '/';
+  }
   const name = location.state ? location.state : '';
 
   const [data, setData] = useState([]);
