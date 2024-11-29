@@ -1,59 +1,96 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Header, Footer } from 'components/layout';
-import { Outro, Result } from 'components';
-
-import { COLOR } from 'utils/constants';
+import { YEAR } from 'utils/constants';
+import { validateID, checkExistID } from 'utils/functions';
 
 function MainPage() {
-  const Wrapper = styled.section`
-    /* width: 76.8rem; */
-    width: 65rem;
-    margin: 0 auto;
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState('');
 
-    font-size: 2rem;
-    letter-spacing: 0.4rem;
-    line-height: 3rem;
+  const handleEnter = async (e) => {
+    if (e.key === 'Enter') {
+      // 1. 유효성 검사
+      const errorMessage = validateID(e.target.value);
+      if (errorMessage) {
+        alert(errorMessage);
+        return;
+      }
 
-    section ~ section {
-      margin-top: 5rem;
+      // 2. username 실존 검사
+      const checkUser = await checkExistID(e.target.value);
+      return !checkUser
+        ? alert('유효한 ID가 아닙니다.')
+        : setUserID(e.target.value);
     }
+  };
+  const handleTimeout = () => {
+    setTimeout(() => {
+      navigate('/result', { state: userID });
+    }, 5000);
+  };
 
-    input {
-      color: inherit;
-      font-family: inherit;
-      font-size: inherit;
-      letter-spacing: inherit;
-      line-height: inherit;
-      background-color: ${COLOR.bg};
-      border-width: 0 0 1px;
-      border-style: dashed;
-      border-color: ${COLOR.text};
-    }
-    input:focus {
-      color: inherit;
-    }
-  `;
+  useEffect(() => {
+    userID && handleTimeout();
+  }, [userID]);
 
-  const Title = styled.section`
-    text-align: center;
-    line-height: 5rem;
-    letter-spacing: 1.5rem;
-  `;
+  return (
+    <>
+      {/* 1 - intro */}
+      <Intro>
+        <h2 className='sr-only'>연말결산 소개</h2>
+        <p>GitHub로 돌아보는 나의 {YEAR}년 개발 기록</p>
+        <p>
+          계속하려면 아무 키나 누르십시오. . .
+          <br />
+          (Press any key to continue. . .)
+        </p>
+      </Intro>
+      {/* 1 - input text */}
+      <Form>
+        <p>
+          GitHub ID(username)를 입력하세요 . . . <br />
+          (최소 4자 이상의 영문 or 숫자 조합)
+          <br />
+          <input
+            type='text'
+            name='username'
+            placeholder='영문 or 숫자 조합'
+            maxLength='40'
+            onKeyDown={handleEnter}
+          />
+        </p>
+        <button>ㄴEnter</button>
+        {userID && (
+          <>
+            <p>
+              입력하신 아이디(username)는 '<span id='userName'>{userID}</span>'
+              입니다.
+            </p>
+            <p>5초 뒤 이동합니다 . . .</p>
+          </>
+        )}
+      </Form>
 
-  const Intro = styled.section`
-    p {
-      position: relative;
-      left: 3rem;
-    }
-    p::before {
-      position: absolute;
-      left: -3rem;
-      content: '> ';
-      width: 1rem;
-      height: 1rem;
-    }
-    /* p {
+      {/* 2 - result */}
+    </>
+  );
+}
+
+const Intro = styled.section`
+  p {
+    position: relative;
+    left: 3rem;
+  }
+  p::before {
+    position: absolute;
+    left: -3rem;
+    content: '> ';
+    width: 1rem;
+    height: 1rem;
+  }
+  /* p {
       overflow: hidden;
       border-right: 1rem solid white;
       white-space: nowrap;
@@ -78,74 +115,24 @@ function MainPage() {
         border-color: white;
       }
     } */
-  `;
+`;
 
-  const Form = styled.section`
-    p {
-      position: relative;
-      left: 3rem;
-    }
-    p::before {
-      position: absolute;
-      left: -3rem;
-      content: '> ';
-      width: 1rem;
-      height: 1rem;
-    }
-  `;
+const Form = styled.section`
+  p {
+    position: relative;
+    left: 3rem;
+  }
+  p::before {
+    position: absolute;
+    left: -3rem;
+    content: '> ';
+    width: 1rem;
+    height: 1rem;
+  }
+  #userName {
+    border-width: 0 0 1px;
+    border-style: dashed;
+  }
+`;
 
-  return (
-    <>
-      <Header />
-
-      <main>
-        <Wrapper>
-          {/* title */}
-          <Title>
-            <p>******************</p>
-            <h2>
-              2023
-              <br />
-              GitHub 연말결산
-            </h2>
-            <p>******************</p>
-          </Title>
-
-          {/* 1 - intro */}
-          <Intro>
-            <h2 className='sr-only'>연말결산 소개</h2>
-            <div>
-              <p>GitHub로 돌아보는 나의 2023년 개발 기록</p>
-              <p>
-                계속하려면 아무 키나 누르십시오. . .
-                <br />
-                (Press any key to continue. . .)
-              </p>
-            </div>
-          </Intro>
-
-          {/* 1 - input text */}
-          <Form>
-            <p>
-              GitHub 아이디(username)을 입력하세요 :
-              <input type='text' name='username' />
-            </p>
-            <p>
-              입력하신 아이디(username)는 '<span id='userName'>___</span>'
-              입니다.
-            </p>
-          </Form>
-
-          {/* 2 - result */}
-          <Result />
-
-          {/* 2 - Outro */}
-          <Outro />
-        </Wrapper>
-      </main>
-
-      <Footer />
-    </>
-  );
-}
 export default MainPage;
