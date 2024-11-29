@@ -40,7 +40,6 @@ export const paginateOctokit = async (name, url) => {
 
       headers: { 'X-GitHub-Api-Version': '2022-11-28' },
     });
-    // console.log(commits);
 
     return commits;
   } catch (err) {

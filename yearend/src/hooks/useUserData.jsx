@@ -2,18 +2,20 @@ import { useState, useEffect } from 'react';
 import { requestOctokit } from 'utils/octokit';
 
 function useUserData(username, type) {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({
-    created_at: '9999-99-99',
-    login: 'test',
-    public_repos: '000',
-  });
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState({});
 
   const url = type ? `/users/{account_id}/${type}` : '/users/{account_id}';
 
   useEffect(() => {
+    if (!username) return;
+    // if (!username) {
+    //   setLoading(false); // param 없으면 로딩 종료
+    //   return;
+    // }
+
     const getUser = async () => {
-      setLoading(false);
+      setLoading(true);
 
       try {
         const data = await requestOctokit({
@@ -27,7 +29,7 @@ function useUserData(username, type) {
       } catch (err) {
         console.error(err);
       }
-      setLoading(true);
+      setLoading(false);
     };
 
     getUser();

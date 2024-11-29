@@ -1,139 +1,82 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { COLOR, YEAR } from 'utils/constants';
-import { Outro, Result } from 'components';
-import { Header, Footer } from 'components/layout';
-import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
+import { YEAR } from 'utils/constants';
+import { validateID, checkExistID } from 'utils/functions';
 
 function MainPage() {
-  const testUserName = 'nurimeansworld';
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState('');
 
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const handleEnter = async (e) => {
+    if (e.key === 'Enter') {
+      // 1. 유효성 검사
+      const errorMessage = validateID(e.target.value);
+      if (errorMessage) {
+        alert(errorMessage);
+        return;
+      }
 
-  const { data: user, loading: loadingUser } = useUserData(testUserName);
-  const { data: dataofAll, loading: loadingAll } = useYearData(testUserName);
-  const { data: dataof2024, loading: loading2024 } = useYearData(
-    testUserName,
-    '2024'
-  );
-  const { data: langData, loading: loadingLang } = useLangData(testUserName);
-  const { data: commitData, loading: loadingCommit } =
-    useCommitData(testUserName);
-
-  useEffect(() => {
-    const loadingList = [
-      loadingAll,
-      loading2024,
-      loadingUser,
-      loadingLang,
-      loadingCommit,
-    ];
-    if (loadingList.every(Boolean)) {
-      setLoading(true);
+      // 2. username 실존 검사
+      const checkUser = await checkExistID(e.target.value);
+      return !checkUser
+        ? alert('유효한 ID가 아닙니다.')
+        : setUserID(e.target.value);
     }
-  }, [loadingAll, loading2024, loadingUser, loadingLang, loadingCommit]);
+  };
+  const handleTimeout = () => {
+    setTimeout(() => {
+      navigate('/result', { state: userID });
+    }, 5000);
+  };
 
   useEffect(() => {
-    setData({
-      user: user,
-      dataofAll: dataofAll,
-      dataof2024: dataof2024,
-      mostof2024: {
-        sortedDate: commitData?.date,
-        sortedRepo: commitData?.repo,
-        sortedLang: langData,
-      },
-    });
-  }, [user, dataofAll, dataof2024, commitData, langData]);
+    userID && handleTimeout();
+  }, [userID]);
 
   return (
     <>
-      <Header />
-
-      <main>
-        <Wrapper>
-          {/* title */}
-          <Title>
-            <p>******************</p>
-            <h2>
-              {YEAR}
-              <br />
-              GitHub 연말결산
-            </h2>
-            <p>******************</p>
-          </Title>
-          {/* 1 - intro */}
-          <Intro>
-            <h2 className='sr-only'>연말결산 소개</h2>
-            <div>
-              <p>GitHub로 돌아보는 나의 {YEAR}년 개발 기록</p>
-              <p>
-                계속하려면 아무 키나 누르십시오. . .
-                <br />
-                (Press any key to continue. . .)
-              </p>
-            </div>
-          </Intro>
-          {/* 1 - input text */}
-          <Form>
+      {/* 1 - intro */}
+      <Intro>
+        <h2 className='sr-only'>연말결산 소개</h2>
+        <p>GitHub로 돌아보는 나의 {YEAR}년 개발 기록</p>
+        <p>
+          계속하려면 아무 키나 누르십시오. . .
+          <br />
+          (Press any key to continue. . .)
+        </p>
+      </Intro>
+      {/* 1 - input text */}
+      <Form>
+        <p>
+          GitHub ID(username)를 입력하세요 . . . <br />
+          (최소 4자 이상의 영문 or 숫자 조합)
+          <br />
+          <input
+            type='text'
+            name='username'
+            placeholder='영문 or 숫자 조합'
+            maxLength='40'
+            onKeyDown={handleEnter}
+          />
+        </p>
+        <button>ㄴEnter</button>
+        {userID && (
+          <>
             <p>
-              GitHub 아이디(username)을 입력하세요 :
-              <input type='text' name='username' />
-            </p>
-            <p>
-              입력하신 아이디(username)는 '<span id='userName'>___</span>'
+              입력하신 아이디(username)는 '<span id='userName'>{userID}</span>'
               입니다.
             </p>
-          </Form>
-          {/* 2 - result */}
-          <Result loading={loading} {...data} />
-          {/* <Result loading={loadingAll} data={data} /> */}
-          {/* 2 - Outro */}
-          <Outro {...data} />
-        </Wrapper>
-      </main>
+            <p>5초 뒤 이동합니다 . . .</p>
+          </>
+        )}
+      </Form>
 
-      <Footer />
+      {/* 2 - result */}
     </>
   );
 }
-
-const Wrapper = styled.section`
-  /* width: 76.8rem; */
-  width: 65rem;
-  margin: 0 auto;
-
-  font-size: 2rem;
-  letter-spacing: 0.4rem;
-  line-height: 3rem;
-
-  section ~ section {
-    margin-top: 5rem;
-  }
-
-  input {
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    letter-spacing: inherit;
-    line-height: inherit;
-    background-color: ${COLOR.bg};
-    border-width: 0 0 1px;
-    border-style: dashed;
-    border-color: ${COLOR.text};
-  }
-  input:focus {
-    color: inherit;
-  }
-`;
-
-const Title = styled.section`
-  text-align: center;
-  line-height: 5rem;
-  letter-spacing: 1.5rem;
-`;
 
 const Intro = styled.section`
   p {
@@ -185,6 +128,10 @@ const Form = styled.section`
     content: '> ';
     width: 1rem;
     height: 1rem;
+  }
+  #userName {
+    border-width: 0 0 1px;
+    border-style: dashed;
   }
 `;
 

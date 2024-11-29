@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react';
 import { requestOctokit } from 'utils/octokit';
 
 function useYearData(username, year = 'all') {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
   const query =
     year === 'all' ? `<=${YEAR}-12-31` : `${year}-01-01..${year}-12-31`;
 
   useEffect(() => {
-    setLoading(false);
+    if (!username) return;
+
+    setLoading(true);
 
     // 모든 데이터
     const fetchData = async () => {
@@ -68,7 +70,7 @@ function useYearData(username, year = 'all') {
       const res = await Promise.all(promise);
 
       setData(res);
-      setLoading(true);
+      setLoading(false);
     };
 
     fetchData();
