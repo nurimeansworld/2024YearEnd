@@ -31,9 +31,6 @@ function Result({
   ) : (
     <Section>
       <h2 className='sr-only'>연말결산 결과</h2>
-      <p className='userName'>
-        username : '<span id='userName'>{name}</span>'
-      </p>
       <div>
         GitHub와 함께 개발 여정을 시작한 <br />
         <span id='startDate'>'{startDate}'</span> 로부터{' '}
@@ -117,6 +114,7 @@ function Result({
 }
 
 const Section = styled.section`
+  text-align: left;
   div {
     position: relative;
     left: 3rem;

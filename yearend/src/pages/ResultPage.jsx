@@ -63,9 +63,14 @@ function ResultPage() {
   return (
     <>
       <Title />
+      {name && (
+        <p className='userName'>
+          username : '<span id='userName'>{name}</span>'
+        </p>
+      )}
       {name ? (
         loading ? (
-          <p> loading . . . </p>
+          <p>loading . . .</p>
         ) : (
           <>
             <Result loading={loading} {...data} />
