@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
 import { Header, Footer } from './';
-import { COLOR } from 'utils/constants';
+import { COLOR, BREAK_POINT } from 'utils/constants';
 
 function Layout({ children }) {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <main>
         <Wrapper>{children}</Wrapper>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
@@ -18,29 +18,25 @@ function Layout({ children }) {
 const Wrapper = styled.section`
   /* width: 76.8rem; */
   width: 65rem;
-  margin: 0 auto;
+  max-width: calc(100vw - 4rem);
+  margin: 5rem auto;
 
   font-size: 2rem;
   letter-spacing: 0.4rem;
   line-height: 3rem;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   section ~ section {
     margin-top: 5rem;
   }
 
-  input {
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    letter-spacing: inherit;
-    line-height: inherit;
-    background-color: ${COLOR.bg};
-    border-width: 0 0 1px;
-    border-style: dashed;
-    border-color: ${COLOR.text};
-  }
-  input:focus {
-    color: inherit;
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    width: 40rem;
+    font-size: 1.5rem;
+    letter-spacing: 0.2rem;
   }
 `;
 

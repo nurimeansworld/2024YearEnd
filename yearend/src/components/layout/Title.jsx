@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { YEAR } from 'utils/constants';
+import { YEAR, BREAK_POINT } from 'utils/constants';
 
 function Title() {
   return (
@@ -18,9 +18,15 @@ function Title() {
   );
 }
 const TitleSec = styled.section`
+  width: 100%;
   text-align: center;
   line-height: 5rem;
   letter-spacing: 1.5rem;
+
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    font-size: 1.5rem;
+    letter-spacing: 1rem;
+  }
 `;
 
 export default Title;
