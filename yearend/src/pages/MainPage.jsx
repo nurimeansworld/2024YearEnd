@@ -57,8 +57,12 @@ function MainPage() {
             onChange={(e) => setUserID(e.target.value)}
             onKeyDown={handleEnter}
           />
-          <button type='button' onClick={handleEnter}>
-            ENTER
+          <button
+            type='button'
+            onClick={handleEnter}
+            disabled={userID === '' ? true : false}
+          >
+            &#62;&#62; ENTER
           </button>
         </Form>
       </Intro>
@@ -158,7 +162,11 @@ const Form = styled.section`
     display: block;
     margin: 5rem auto 0 auto;
     border: 1px solid ${COLOR.text};
-    padding: 1rem 3rem;
+    padding: 1rem 2rem;
+  }
+  button:disabled {
+    color: ${COLOR.inactive};
+    border-color: ${COLOR.inactive};
   }
 `;
 

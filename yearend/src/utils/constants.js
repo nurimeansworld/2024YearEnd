@@ -6,6 +6,7 @@ export const BREAK_POINT = {
 export const COLOR = {
   bg: '#000',
   text: '#fff',
+  inactive: '#808080',
   point1: '#4599EF',
   point2: '#EC6FF7',
   point3: '#9CFC78',
