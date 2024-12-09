@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { YEAR } from 'utils/constants';
+import { YEAR, BREAK_POINT } from 'utils/constants';
 
 function Result({
   loading,
@@ -136,6 +136,17 @@ const Section = styled.section`
   .userName {
     text-align: center;
     margin-bottom: 4rem;
+  }
+
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    /* width: 30rem; */
+    div {
+      position: relative;
+      left: 2rem;
+    }
+    div::before {
+      left: -2rem;
+    }
   }
 `;
 

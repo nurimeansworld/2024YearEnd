@@ -34,7 +34,7 @@ const Wrapper = styled.section`
   }
 
   @media (max-width: ${BREAK_POINT.tablet}px) {
-    width: 40rem;
+    width: 30rem;
     font-size: 1.5rem;
     letter-spacing: 0.2rem;
   }
