@@ -37,10 +37,14 @@ function MainPage() {
       {/* 1 - intro */}
       <Intro>
         <h2 className='sr-only'>연말결산 소개</h2>
-        <p id='writing1'> GitHub로 돌아보는 나의 ✨{YEAR}년✨ 개발 기록</p>
+        <p id='writing1'>
+          {' '}
+          GitHub로 돌아보는 나의
+          <br />✨{YEAR}년✨ 개발 기록
+        </p>
         {/* 1 - input text */}
         <p>
-          기록을 돌아볼 GitHub username(ID)를 입력하세요. <br />
+          GitHub username(ID)를 입력하세요. <br />
           (최소 4자 이상의 영문 or 숫자 조합)
         </p>
         <Form>
@@ -88,6 +92,9 @@ const Intro = styled.section`
     .inputID {
       font-size: 1.5rem;
       letter-spacing: 0.2rem;
+    }
+    p ~ p {
+      margin-top: 3rem;
     }
     /* p {
       left: 2rem;
