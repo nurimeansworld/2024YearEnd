@@ -73,11 +73,7 @@ function ResultPage() {
   return (
     <>
       <Title />
-      {name && (
-        <p className='userName'>
-          username : '<span id='userName'>{name}</span>'
-        </p>
-      )}
+      {name && <p className='userName'>&#62; username : {name}</p>}
       {name ? (
         loading ? (
           <Loading>

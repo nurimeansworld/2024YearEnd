@@ -54,7 +54,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   span {
-    background: #5c4450;
+    font-weight: bold;
+    color: ${COLOR.text};
+    /* color: ${COLOR.point1}; */
   }
 
   .sr-only {

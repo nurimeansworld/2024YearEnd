@@ -24,6 +24,8 @@ const Wrapper = styled.section`
   font-size: 2rem;
   letter-spacing: 0.4rem;
   line-height: 3rem;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   display: flex;
   flex-direction: column;
