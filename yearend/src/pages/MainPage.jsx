@@ -81,63 +81,11 @@ const Intro = styled.section`
     margin-top: 5rem;
   }
 
-  /* p::before {
-    position: absolute;
-    left: -3rem;
-    content: '> ';
-    width: 1rem;
-    height: 1rem;
-  }
-  p {
-    position: relative;
-    left: 3rem;
-  } */
   @media (max-width: ${BREAK_POINT.tablet}px) {
-    .inputID {
-      font-size: 1.5rem;
-      letter-spacing: 0.2rem;
-    }
     p ~ p {
       margin-top: 3rem;
     }
-    /* p {
-      left: 2rem;
-    }
-    p::before {
-      left: -2rem;
-    } */
   }
-  /* 
-  p[id*='writing'] {
-    overflow: hidden;
-    border-right: 1rem solid white;
-    white-space: nowrap;
-    letter-spacing: 0.15em;
-    animation: blink-caret 0.5s step-end infinite;
-  }
-
-  p#writing1 {
-    animation: typing 5s steps(50), blink-caret 0.5s step-end infinite 0s;
-  }
-  p#writing2 {
-    visibility: hidden;
-    animation: typing 5s steps(50) 5s, blink-caret 0.5s step-end infinite;
-    animation-delay: 5s;
-  } */
-
-  /* @keyframes typing {
-    from {
-      width: 0;
-    }
-    to {
-      width: 70%;
-    }
-  }
-  @keyframes blink-caret {
-    50% {
-      border-color: white;
-    }
-  } */
 `;
 
 const Form = styled.section`
@@ -167,6 +115,13 @@ const Form = styled.section`
   button:disabled {
     color: ${COLOR.inactive};
     border-color: ${COLOR.inactive};
+  }
+
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    .inputID {
+      font-size: 1.5rem;
+      letter-spacing: 0.2rem;
+    }
   }
 `;
 

@@ -33,9 +33,9 @@ const TitleSec = styled.section`
     margin: 0 0.5rem;
   }
 
-  @media (max-width: ${BREAK_POINT.tablet}px) {
+  /* @media (max-width: ${BREAK_POINT.tablet}px) {
     font-size: 1.5rem;
-  }
+  } */
 `;
 
 export default Title;
