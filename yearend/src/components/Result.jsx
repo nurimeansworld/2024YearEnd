@@ -27,7 +27,7 @@ function Result({
   const { sortedDate, sortedLang, sortedRepo } = mostof2024;
 
   return loading ? (
-    <p> loading . . . </p>
+    <p>loading . . .</p>
   ) : (
     <Section>
       <h2 className='sr-only'>연말결산 결과</h2>
@@ -104,11 +104,6 @@ function Result({
         <span>{sortedRepo?.name}</span>로 총 <span>{sortedRepo?.counts}</span>
         개의 커밋을 하셨어요!
       </div>
-
-      {/* <div>
-        올해 제일 많은 스타를 받은 저장소는 <br />
-        <span>'0000'</span>로 총 <span>'00'</span>개의 스타를 받으셨어요!
-      </div> */}
     </Section>
   );
 }
