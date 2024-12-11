@@ -73,7 +73,7 @@ function ResultPage() {
   return (
     <>
       <Title />
-      {name && <p className='userName'>&#62; username : {name}</p>}
+      {name && <P className='userName'>&#62; username : {name}</P>}
       {name ? (
         loading ? (
           <Loading>
@@ -95,6 +95,11 @@ function ResultPage() {
     </>
   );
 }
+
+const P = styled.p`
+  width: 100%;
+  text-align: center;
+`;
 
 const Loading = styled.section`
   .spinner {
