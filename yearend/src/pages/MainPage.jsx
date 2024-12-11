@@ -123,6 +123,15 @@ const Form = styled.section`
       letter-spacing: 0.2rem;
     }
   }
+  button {
+    color: inherit;
+    font-size: 2rem;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid;
+    padding: 1rem 3rem;
+  }
 `;
 
 export default MainPage;
