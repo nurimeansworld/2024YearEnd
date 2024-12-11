@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { YEAR } from 'utils/constants';
+import { COLOR, YEAR, BREAK_POINT } from 'utils/constants';
 
 function Result({
   loading,
@@ -27,21 +27,18 @@ function Result({
   const { sortedDate, sortedLang, sortedRepo } = mostof2024;
 
   return loading ? (
-    <p> loading . . . </p>
+    <p>loading . . .</p>
   ) : (
     <Section>
       <h2 className='sr-only'>연말결산 결과</h2>
-      <p className='userName'>
-        username : '<span id='userName'>{name}</span>'
-      </p>
       <div>
-        GitHub와 함께 개발 여정을 시작한 <br />
-        <span id='startDate'>'{startDate}'</span> 로부터{' '}
-        <span id='countDate'>'{countDate}'</span>일이 지났어요.
+        💌 GitHub와 함께 개발 여정을 시작한 <br />
+        <span>'{startDate}'</span> 로부터 <span>'{countDate}'</span>일이
+        지났어요.
       </div>
 
       <div>
-        그동안 '<span id='userName'>{name}</span>'님은
+        <span>✨ {name}</span>님은 그동안
         <ul>
           <li>
             - <span>{resAll.commits}</span> 개의 커밋
@@ -59,7 +56,7 @@ function Result({
       </div>
 
       <div>
-        {YEAR}년 올해에는
+        <span>💙 {YEAR}년</span> 올해에는
         <ul>
           <li>
             - <span>{res2024.commits}</span>개의 커밋
@@ -77,46 +74,46 @@ function Result({
       </div>
 
       <div>
-        올해 자주 사용한 언어 순위는 아래와 같아요.
+        <span>🏆 올해 자주 사용한 언어 순위</span>는 아래와 같아요.
         <ol>
           {sortedLang.slice(0, 3).map((ele, ind) => (
-            <li key={ind}>{ele.name}</li>
+            <li key={ind}>
+              <span>{ele.name}</span>
+            </li>
           ))}
           {sortedLang.length > 3 && (
             <li>
-              그 외
+              {'그 외 '}
               {sortedLang.slice(3).map((ele, ind) => (
                 <span key={ind}>
                   {ele.name}
-                  {ind < sortedLang.slice(3).length - 1 ? ', ' : ''}
+                  {ind < sortedLang.slice(3).length - 2 ? ', ' : ''}
                 </span>
               ))}
+              {' ...'}
             </li>
           )}
         </ol>
       </div>
 
       <div>
-        올해 제일 많은 커밋을 한 날은 <br />
+        <span>🌱 올해 제일 많은 커밋을 한 날</span>은 <br />
         <span>{sortedDate?.name}</span>로 총 <span>{sortedDate?.counts}</span>
         개의 커밋을 하셨어요!
       </div>
 
       <div>
-        올해 제일 많은 커밋을 한 저장소는 <br />
+        <span>🪴 올해 제일 많은 커밋을 한 저장소</span>는 <br />
         <span>{sortedRepo?.name}</span>로 총 <span>{sortedRepo?.counts}</span>
         개의 커밋을 하셨어요!
       </div>
-
-      {/* <div>
-        올해 제일 많은 스타를 받은 저장소는 <br />
-        <span>'0000'</span>로 총 <span>'00'</span>개의 스타를 받으셨어요!
-      </div> */}
     </Section>
   );
 }
 
 const Section = styled.section`
+  text-align: left;
+  color: ${COLOR.inactive};
   div {
     position: relative;
     left: 3rem;
@@ -138,6 +135,20 @@ const Section = styled.section`
   .userName {
     text-align: center;
     margin-bottom: 4rem;
+  }
+
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    /* width: 30rem; */
+    div {
+      position: relative;
+      left: 2rem;
+    }
+    div::before {
+      left: -2rem;
+    }
+    div ~ div {
+      margin-top: 3rem;
+    }
   }
 `;
 

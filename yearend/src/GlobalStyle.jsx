@@ -6,6 +6,9 @@ const GlobalStyle = createGlobalStyle`
     font-size: 10px;
   }
   body {
+    padding: 0;
+    margin: 0;
+    
     font-size: 1.6rem;
     font-family: 'NeoDunggeunmo Pro', 'Spoqa Han Sans Neo';
 
@@ -27,7 +30,7 @@ const GlobalStyle = createGlobalStyle`
   }
   
   dl, dt, dd, ol, ul, li{
-    padding:0;
+    padding: 0;
     margin: 0;
   }
 
@@ -51,7 +54,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   span {
-    background: #5c4450;
+    font-weight: bold;
+    color: ${COLOR.text};
+    /* color: ${COLOR.point1}; */
   }
 
   .sr-only {
