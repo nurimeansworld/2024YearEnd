@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { BtnSaveImg, BtnShare } from 'components';
 
-import { Share } from './';
-import { YEAR } from 'utils/constants';
+import { YEAR, COLOR, BREAK_POINT } from 'utils/constants';
 
-function Outro() {
+function Outro({ name, res }) {
   return (
     <Section>
       <h2 className='sr-only'>연말결산 공유하기</h2>
@@ -22,8 +23,11 @@ function Outro() {
         다가올 {YEAR + 1}년도 행코즐코 되세요!
       </p>
 
-      {/* 공유하기 */}
-      <Share />
+      <Div>
+        <BtnSaveImg name={name} res={res} />
+        <BtnShare />
+        <LinkHome to='/'>다시하기</LinkHome>
+      </Div>
     </Section>
   );
 }
@@ -36,6 +40,35 @@ const Section = styled.section`
 
   .sec-emoji {
     margin: 5rem 0;
+  }
+`;
+const LinkHome = styled(Link)`
+  /* padding: 1rem 2rem; */
+  border: 1px solid;
+`;
+const Div = styled.div`
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+
+  button {
+    font-size: 2rem;
+    color: ${COLOR.text};
+    text-align: center;
+    border: 1px solid ${COLOR.text};
+    padding: 1rem 2rem;
+  }
+  button:disabled {
+    color: ${COLOR.inactive};
+    border-color: ${COLOR.inactive};
+  }
+
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    gap: 3rem;
+    button {
+      font-size: 1.5rem;
+    }
   }
 `;
 export default Outro;
