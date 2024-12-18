@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { YEAR, BREAK_POINT } from 'utils/constants';
 import dragon from '../../assets/dragon_w.png';
 
-function Title() {
+function Title({ name }) {
   return (
     <>
       {/* title */}
@@ -19,6 +19,7 @@ function Title() {
         </h2>
         <p>---</p>
       </TitleSec>
+      {name && <P className='userName'>&#62; username : {name}</P>}
     </>
   );
 }
@@ -32,6 +33,10 @@ const TitleSec = styled.section`
     width: 3rem;
     margin: 0 0.5rem;
   }
+`;
+const P = styled.p`
+  width: 100%;
+  text-align: center;
 `;
 
 export default Title;
