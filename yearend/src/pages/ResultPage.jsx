@@ -36,23 +36,23 @@ function ResultPage() {
       loadingAll || loading2024 || loadingUser || loadingLang || loadingCommit
     );
 
-    const res = [];
-    var count = 0;
+    var count = 1;
     const mesg = [
       '[ ------- LIST ------- ]',
-      '✅ 유저 데이터',
-      '✅ 2024년의 커밋 데이터',
-      '✅ 자주 사용한 언어 데이터',
-      '✅ 많이 커밋한 날짜 데이터',
+      '[ ] 유저 데이터',
+      '[ ] 2024년의 커밋 데이터',
+      '[ ] 자주 사용한 언어 데이터',
+      '[ ] 많이 커밋한 날짜 데이터',
+      '[ ] 이미지로 정리',
     ];
 
     for (var e in loadingList) {
       if (loadingList[e] === false) {
-        res.push(mesg[count]);
+        mesg[count] = `[✅] ${mesg[count].substr(3)}`;
         count++;
       }
     }
-    setLoadText(res);
+    setLoadText(mesg);
   }, [name, loadingAll, loading2024, loadingUser, loadingLang, loadingCommit]);
 
   useEffect(() => {
