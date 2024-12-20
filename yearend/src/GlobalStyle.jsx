@@ -59,6 +59,10 @@ const GlobalStyle = createGlobalStyle`
     /* color: ${COLOR.point1}; */
   }
 
+  input{
+    border-radius: 0;
+  }
+
   .sr-only {
     overflow: hidden;
     position: absolute;

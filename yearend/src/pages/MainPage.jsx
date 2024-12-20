@@ -119,18 +119,10 @@ const Form = styled.section`
 
   @media (max-width: ${BREAK_POINT.tablet}px) {
     .inputID {
+      width: 70%;
       font-size: 1.5rem;
       letter-spacing: 0.2rem;
     }
-  }
-  button {
-    color: inherit;
-    font-size: 2rem;
-    text-align: center;
-    display: block;
-    margin: 0 auto;
-    border: 1px solid;
-    padding: 1rem 3rem;
   }
 `;
 
