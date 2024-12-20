@@ -74,7 +74,7 @@ function useYearData(username, year = 'all') {
     };
 
     fetchData();
-  }, [username]);
+  }, [username, query]);
 
   return { data, loading };
 }
