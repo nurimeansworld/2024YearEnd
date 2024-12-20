@@ -5,6 +5,11 @@ on:
     branches:
       - main # 메인 브랜치에 푸시 시 실행
 
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
