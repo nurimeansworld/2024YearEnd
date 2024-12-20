@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '16'
 
-      # 3. `test` 디렉토리로 이동
+      # 3. `yearend` 디렉토리로 이동
       - name: Navigate to React app directory
         run: cd yearend
 
@@ -29,14 +29,17 @@ jobs:
         run: npm install
         working-directory: ./yearend
 
-      # 5. 앱 빌드
+      # 5. 환경변수 설정 (동적 생성)
+      - name: Set environment variables
+        run: echo "REACT_APP_OCTOKIT_TOKEN=${{ secrets.REACT_APP_OCTOKIT_TOKEN }}" >> .env
+        working-directory: ./yearend
+
+      # 6. 앱 빌드
       - name: Build React app
-        env:
-          REACT_APP_OCTOKIT_TOKEN: ${{ secrets.REACT_APP_OCTOKIT_TOKEN }}
         run: npm run build
         working-directory: ./yearend
 
-      # 6. 빌드 결과물을 GitHub Pages에 배포
+      # 7. 빌드 결과물을 GitHub Pages에 배포
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
