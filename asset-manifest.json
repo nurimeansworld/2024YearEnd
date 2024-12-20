@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/2024YearEnd/static/css/main.d1f31504.css",
-    "main.js": "/2024YearEnd/static/js/main.016ba6dd.js",
+    "main.js": "/2024YearEnd/static/js/main.8a8bb20d.js",
     "static/media/NeoDunggeunmoPro.woff": "/2024YearEnd/static/media/NeoDunggeunmoPro.0818c487bcc1cc8938b1.woff",
     "static/media/NeoDunggeunmoPro.woff2": "/2024YearEnd/static/media/NeoDunggeunmoPro.5650872361e96a910bc3.woff2",
     "index.html": "/2024YearEnd/index.html",
     "main.d1f31504.css.map": "/2024YearEnd/static/css/main.d1f31504.css.map",
-    "main.016ba6dd.js.map": "/2024YearEnd/static/js/main.016ba6dd.js.map"
+    "main.8a8bb20d.js.map": "/2024YearEnd/static/js/main.8a8bb20d.js.map"
   },
   "entrypoints": [
     "static/css/main.d1f31504.css",
-    "static/js/main.016ba6dd.js"
+    "static/js/main.8a8bb20d.js"
   ]
 }
