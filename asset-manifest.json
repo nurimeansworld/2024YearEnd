@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.476936d7.css",
+    "main.js": "/static/js/main.88d91cf2.js",
+    "static/media/NeoDunggeunmoPro.woff": "/static/media/NeoDunggeunmoPro.0818c487bcc1cc8938b1.woff",
+    "static/media/NeoDunggeunmoPro.woff2": "/static/media/NeoDunggeunmoPro.5650872361e96a910bc3.woff2",
+    "index.html": "/index.html",
+    "main.476936d7.css.map": "/static/css/main.476936d7.css.map",
+    "main.88d91cf2.js.map": "/static/js/main.88d91cf2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.476936d7.css",
+    "static/js/main.88d91cf2.js"
+  ]
+}
