@@ -26,7 +26,7 @@ function Outro({ name, res }) {
       <Div>
         <BtnSaveImg name={name} res={res} />
         <BtnShare />
-        <LinkHome to='/'>다시하기</LinkHome>
+        <LinkHome to='/'>&#62;&#62; 다시하기</LinkHome>
       </Div>
     </Section>
   );
@@ -43,8 +43,11 @@ const Section = styled.section`
   }
 `;
 const LinkHome = styled(Link)`
-  /* padding: 1rem 2rem; */
+  padding: 0.5rem;
   border: 1px solid;
+  @media (max-width: ${BREAK_POINT.tablet}px) {
+    padding: 0.25rem;
+  }
 `;
 const Div = styled.div`
   margin-top: 5rem;
