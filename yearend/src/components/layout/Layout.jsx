@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-import { Header, Footer } from './';
-import { COLOR, BREAK_POINT } from 'utils/constants';
+import { BREAK_POINT } from 'utils/constants';
 
 function Layout({ children }) {
   return (
@@ -39,6 +38,9 @@ const Wrapper = styled.section`
     width: 30rem;
     font-size: 1.5rem;
     letter-spacing: 0.2rem;
+    section ~ section {
+      margin-top: 3rem;
+    }
   }
 `;
 
