@@ -1,6 +1,6 @@
 import GlobalStyle from 'GlobalStyle';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { MainPage, ResultPage, NotFoundPage } from 'components/pages';
+import { MainPage, ResultPage, NotFoundPage } from 'pages';
 import { Layout } from 'components/layout';
 import GATracker from 'utils/GATracker';
 
