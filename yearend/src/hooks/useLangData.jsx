@@ -49,7 +49,7 @@ function useLangData(username) {
     };
 
     getRepoLang();
-  }, [loadingrepoList]);
+  }, [loadingrepoList, username, repoList]);
 
   return { data, loading };
 }

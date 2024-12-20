@@ -38,7 +38,7 @@ function useCommitData(username) {
     };
 
     getCommits2024();
-  }, []);
+  }, [username]);
 
   return { data, loading };
 }

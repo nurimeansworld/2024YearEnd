@@ -33,7 +33,7 @@ function useUserData(username, type) {
     };
 
     getUser();
-  }, [username]);
+  }, [username, type, url]);
 
   return { data, loading };
 }

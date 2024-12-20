@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Outro, Result } from 'components';
+import { Result } from 'components';
 import { useCommitData, useLangData, useUserData, useYearData } from 'hooks';
 import { Title } from 'components/layout';
 
@@ -84,7 +84,6 @@ function ResultPage() {
         ) : (
           <>
             <Result loading={loading} {...data} />
-            {/* <Outro {...data} /> */}
           </>
         )
       ) : (
