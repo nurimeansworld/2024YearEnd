@@ -1,17 +1,19 @@
 import styled from 'styled-components';
-import { YEAR, BREAK_POINT } from 'utils/constants';
+import { YEAR } from 'utils/constants';
 import dragon from '../../assets/dragon_w.png';
 
-function Title({ name }) {
+function Title({ name, logo = true }) {
   return (
     <>
       {/* title */}
       <TitleSec>
-        <div>
-          <img src={dragon} alt='2024 상징 용 이미지' />
-          <img src={dragon} alt='2024 상징 용 이미지' />
-          <img src={dragon} alt='2024 상징 용 이미지' />
-        </div>
+        {logo && (
+          <div>
+            <img src={dragon} alt='2024 상징 용 이미지' />
+            <img src={dragon} alt='2024 상징 용 이미지' />
+            <img src={dragon} alt='2024 상징 용 이미지' />
+          </div>
+        )}
         <h2>
           {YEAR}
           <br />

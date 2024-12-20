@@ -42,8 +42,10 @@ function BtnSaveImg({ name, res }) {
       left: '0',
       opacity: '1',
       pointerEvents: 'auto',
-      width: `${imgW}px`,
-      height: `${imgH}px`,
+      // width: `${imgW}px`,
+      // height: `${imgH}px`,
+      width: '50rem',
+      height: '100rem',
     });
 
     domtoimage
@@ -74,19 +76,20 @@ function BtnSaveImg({ name, res }) {
 
   return (
     <>
-      <ImgDiv className='imgDiv' ref={imgRef}>
-        <Title name={name} />
-        <div className='resultDiv' />
-      </ImgDiv>
+      <ImgWrapper ref={imgRef}>
+        <ImgDiv className='imgDiv'>
+          <Title name={name} logo={false} />
+          <div className='resultDiv' />
+        </ImgDiv>
+      </ImgWrapper>
 
       <button type='button' onClick={saveAsImage}>
-        이미지 저장하기
+        &#62;&#62; 이미지 저장하기
       </button>
     </>
   );
 }
-
-const ImgDiv = styled.div`
+const ImgWrapper = styled.div`
   // 보이지 않게 스타일링
   opacity: 0;
   pointer-events: none;
@@ -97,11 +100,19 @@ const ImgDiv = styled.div`
   width: 50rem;
   height: 100rem;
   padding: 2rem;
+`;
+const ImgDiv = styled.div`
+  width: 90%;
+  height: auto;
+  max-height: 100%;
+  margin: 0 auto;
+
   font-size: 1.8rem;
   letter-spacing: 0.2rem;
+  h2 {
+    margin-top: 2rem;
+  }
   div {
-    /* margin-top: 2rem; */
-    width: 50rem;
     margin: 2rem auto 0 auto;
   }
   div ~ div {
