@@ -1,9 +1,8 @@
 import GlobalStyle from 'GlobalStyle';
-import MainPage from 'pages/MainPage';
-import ResultPage from 'pages/ResultPage';
-import NotFoundPage from 'pages/NotFoundPage';
-import { Layout } from 'components/layout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { MainPage, ResultPage, NotFoundPage } from 'pages/MainPage';
+import { Layout } from 'components/layout';
+import GATracker from 'utils/GATracker';
 
 function App() {
   return (
@@ -11,6 +10,7 @@ function App() {
       <GlobalStyle />
 
       <BrowserRouter>
+        <GATracker />
         <Layout>
           <Routes>
             <Route path='/' element={<MainPage />} />
