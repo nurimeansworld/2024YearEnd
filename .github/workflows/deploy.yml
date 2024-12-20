@@ -1,0 +1,44 @@
+name: Deploy React App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 메인 브랜치에 푸시 시 실행
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Node.js 환경 설정
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # 프로젝트에 맞는 Node.js 버전 사용
+
+      # 3. `test` 디렉토리로 이동
+      - name: Navigate to React app directory
+        run: cd yearend
+
+      # 4. 의존성 설치
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./yearend
+
+      # 5. 앱 빌드
+      - name: Build React app
+        env:
+          REACT_APP_OCTOKIT_TOKEN: ${{ secrets.REACT_APP_OCTOKIT_TOKEN }}
+        run: npm run build
+        working-directory: ./yearend
+
+      # 6. 빌드 결과물을 GitHub Pages에 배포
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./yearend/build
