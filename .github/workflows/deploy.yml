@@ -3,7 +3,7 @@ name: Deploy React App to GitHub Pages
 on:
   push:
     branches:
-      - main  # 메인 브랜치에 푸시 시 실행
+      - main # 메인 브랜치에 푸시 시 실행
 
 jobs:
   build-deploy:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # 프로젝트에 맞는 Node.js 버전 사용
+          node-version: '16'
 
       # 3. `test` 디렉토리로 이동
       - name: Navigate to React app directory
