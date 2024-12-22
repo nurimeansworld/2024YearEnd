@@ -1,5 +1,5 @@
 import GlobalStyle from 'GlobalStyle';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { MainPage, ResultPage, NotFoundPage } from 'pages';
 import { Layout } from 'components/layout';
 import GATracker from 'utils/GATracker';
@@ -9,7 +9,7 @@ function App() {
     <>
       <GlobalStyle />
 
-      <HashRouter>
+      <BrowserRouter>
         <GATracker />
         <Layout>
           <Routes>
@@ -18,7 +18,7 @@ function App() {
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </Layout>
-      </HashRouter>
+      </BrowserRouter>
       {/* <MainPage /> */}
     </>
   );
