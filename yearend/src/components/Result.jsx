@@ -25,6 +25,7 @@ function Result({
     res2024[e.name] = e.counts;
   });
   const { sortedDate, sortedLang, sortedRepo } = mostof2024;
+  const countedLang = sortedLang.slice(0, 6);
 
   const resRef = useRef();
   const res = resRef.current;
@@ -80,18 +81,18 @@ function Result({
         <div>
           <span>🏆 올해 자주 사용한 언어 순위</span>는 아래와 같아요.
           <ol>
-            {sortedLang.slice(0, 3).map((ele, ind) => (
+            {countedLang.slice(0, 3).map((ele, ind) => (
               <li key={ind}>
                 <span>{ele.name}</span>
               </li>
             ))}
-            {sortedLang.length > 3 && (
+            {countedLang.length > 3 && (
               <li>
                 {'그 외 '}
-                {sortedLang.slice(3).map((ele, ind) => (
+                {countedLang.slice(3).map((ele, ind) => (
                   <span key={ind}>
                     {ele.name}
-                    {ind < sortedLang.slice(3).length - 2 ? ', ' : ''}
+                    {ind < 2 ? ', ' : ''}
                   </span>
                 ))}
                 {' ...'}
