@@ -10,7 +10,7 @@ export const checkExistID = async (str) => {
 };
 
 export const validateID = (str) => {
-  const reg = /^[A-Za-z0-9]{4,39}$/;
+  const reg = /^[A-Za-z0-9_-]{4,39}$/;
   const regKor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
   if (!reg.test(str)) {
