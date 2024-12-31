@@ -2,7 +2,7 @@
 
 https://2024yearend.vercel.app/
 
-<img src="https://file.notion.so/f/f/6ab7a866-335e-4433-9150-77cd09ab51ba/1055f654-1685-45af-9ba4-f70b2ab2df0b/image.png?table=block&id=1686af74-efe2-803d-9652-c8f0d341b983&spaceId=6ab7a866-335e-4433-9150-77cd09ab51ba&expirationTimestamp=1735372800000&signature=pydd_2zNZTp-G3qNt4x_aQk26ijg793oy1Frk7E-H-I&downloadName=image.png">
+<img src="https://nurimeansworld.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F6ab7a866-335e-4433-9150-77cd09ab51ba%2F1055f654-1685-45af-9ba4-f70b2ab2df0b%2Fimage.png?table=block&id=1686af74-efe2-803d-9652-c8f0d341b983&spaceId=6ab7a866-335e-4433-9150-77cd09ab51ba&width=2000&userId=&cache=v2">
 
 ## 개요
 
@@ -16,9 +16,10 @@ https://2024yearend.vercel.app/
 1. [프로젝트 설명](#goal)
 2. [개발 환경 및 배포 URL](#dev)
 3. [프로젝트 구조](#tree)
-4. [주요 기능 및 페이지 설명](#pages)
-5. [고민 포인트 기록](#issues)
+4. [주요 기능 및 페이지 설명](#pages) (작성 중)
+5. [고민 포인트 기록](#issues) (작성 중)
 
+---
 ## <span id="goal">1. 프로젝트 설명</span>
 
 - 깃허브 프로필의 잔디로 매일의 커밋은 확인 가능하지만, 1년간의 데이터를 한눈에 정리하고 싶었습니다.
@@ -97,63 +98,6 @@ URL : 🔗 https://2024yearend.vercel.app/
 
 <p align="right"><a href="#top">(Top)</a></p>
 
-## <span id="pages">4. 주요 기능 및 페이지 설명</span>
 
-### 1) 홈
-
-- 홈페이지 겸 입력 페이지
-- `MainPage.jsx`
-  - 입력 단계에서 정규식 검사(validateID()), 실존하는 유저네임(checkExistID())인지 확인
-- 메인 페이지
-- 메인 페이지
-- 메인 페이지
-
-| TITLE   | TITLE   |
-| ------- | ------- |
-| CONTENT | CONTENT |
-
+## <span id="pages">4. 주요 페이지 및 기능 설명</span>
 ## <span id="issues">5. 고민 포인트 기록</span>
-
-### 1) 커스텀훅의 생성 기준
-
-#### 내용
-
-- list
-- list
-- list
-
-#### 결론
-
-- list
-- list
-- list
-
-### 2) GitHub Actions + pages를 이용한 배포와 Personal Access Token 보안 문제
-
-#### 내용
-
-- list
-- list
-- list
-
-#### 결론
-
-- list
-- list
-- list
-
-### 3) promise.all과 await/async
-
-#### 내용
-
-- list
-- list
-- list
-
-#### 결론
-
-- list
-- list
-- list
-
-<p align="right"><a href="#top">(Top)</a></p>
