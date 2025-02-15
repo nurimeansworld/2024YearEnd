@@ -39,7 +39,7 @@ URL: 🔗 https://2024yearend.vercel.app/
 ## <span id="tree">3. 프로젝트 구조</span>
 
 - `assets/` : 폰트, og 이미지, 아이콘 등
-- `components`/` : 페이지를 제외한 버튼, 레이아웃 등의 컴포넌트 파일
+- `components/` : 페이지를 제외한 버튼, 레이아웃 등의 컴포넌트 파일
 - `hooks/` : API 호출 관련 커스텀 훅 파일
 - `pages/` : 메인, 결과, 404 페이지 파일
 - `utils/` : 커스텀 함수, 상수, GA 설정 등의 유틸 파일
@@ -97,7 +97,7 @@ URL: 🔗 https://2024yearend.vercel.app/
 - `MainPage.jsx`
   - 홈페이지 겸 입력 페이지
   - 입력 단계에서 정규식 검사(`validateID()`), 실존하는 유저네임(`checkExistID()`)인지 확인
-  - Enter 키를 눌렀을 때와 모바일을 고려해 ENTER 버튼 클릭 시에도 실행되도록 설정
+  - 키보드 상의 Enter 키를 눌렀을 때와 모바일을 고려해 버튼(ENTER) 클릭 시에도 실행되도록 설정
 - `ResultPage.jsx`
   - MainPage에서 전달된 `name`으로 관련 데이터를 가져와 상태를 업데이트하는 페이지
   - `name`이 올바르게 넘어오지 않았을 경우 다시 메인으로 이동
@@ -178,7 +178,7 @@ URL: 🔗 https://2024yearend.vercel.app/
 
 ### 3) 그 외(`/utils/funtions`)
 
-- `requestOctokit()`: 반복 사용될 octokit을 이용한 데이터 요청을 함수화. name, url, 요청params를 매개변수로 설정하여 최대한 다양하게 사용 가능하게 생성.
+- `requestOctokit()`: 반복 사용될 octokit을 이용한 데이터 요청을 함수화. name, url, params를 매개변수로 설정하여 최대한 다양하게 사용 가능하게 생성.
 - `paginateOctokit()`: requestOctokit의 request 요청 대신 많은 데이터를 받아와 카운트해야하는 데이터의 경우 paginate로 요청하여 해당 기능 함수화.
 
 ## <span id="issues">5. 고민 포인트 기록</span>
@@ -221,8 +221,7 @@ URL: 🔗 https://2024yearend.vercel.app/
 
 - **상황**
 
-  - 결과 화면을 이미지로 저장하는 기능 구현 중
-  - 디바이스별로 텍스트 줄 바꿈 차이 등으로 인해 깔끔하게 정렬된 이미지를 저장하려면 별도의 레이아웃이 필요
+  - 결과 화면을 이미지로 저장하는 기능 구현 중, 디바이스별로 텍스트 줄 바꿈 차이 등으로 인해 깔끔하게 정렬된 이미지를 저장하려면 별도의 레이아웃이 필요
   - 하지만 `domtoimage`는 렌더링된 화면을 기준으로 캡처하기 때문에, **비가시 영역이 공백으로 저장되는 문제**가 발생
 
 - **결론**
